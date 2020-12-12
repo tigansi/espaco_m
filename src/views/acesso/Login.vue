@@ -120,7 +120,7 @@ export default {
                   JSON.stringify(res.data.dados[0])
                 );
                 loading.dismiss();
-                this.$router.push("/PainelClientes");
+                this.$router.push("HomePainelClientes/PainelClientes");
               } else {
                 loading.dismiss();
                 this.presentToast(res.data.msg);

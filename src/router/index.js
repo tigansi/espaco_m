@@ -31,10 +31,18 @@ const routes = [
     component: () => import("@/views/acesso/Cadastro"),
   },
   {
-    path: "/PainelClientes",
-    name: "PainelClientes",
+    path: "/HomePainelClientes",
+    name: "HomePainelClientes",
     beforeEnter: guardaRota,
-    component: () => import("@/views/clientes/PainelClientes"),
+    component: () => import("@/views/clientes/HomePainelClientes"),
+    children: [
+      {
+        path: "PainelClientes",
+        name: "PainelClientes",
+        beforeEnter: guardaRota,
+        component: () => import("@/views/clientes/painel/PainelClientes"),
+      },
+    ],
   },
 ];
 
