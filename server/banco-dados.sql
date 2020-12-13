@@ -6,5 +6,6 @@ create table usuarios
 	celular     varchar(30)  not null,
 	aniversario date 	     not null,
 	senha       text 	     not null,
-	tipo	    varchar(10)  default 'CLI'				
+	foto        text         default './Fotos/avatar.png',
+	tipo	    varchar(10)  default 'CLI'	
 );

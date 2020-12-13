@@ -37,10 +37,43 @@ const routes = [
     component: () => import("@/views/clientes/HomePainelClientes"),
     children: [
       {
-        path: "PainelClientes",
-        name: "PainelClientes",
+        path: "HomeClientes",
+        name: "HomeClientes",
         beforeEnter: guardaRota,
-        component: () => import("@/views/clientes/painel/PainelClientes"),
+        component: () => import("@/views/clientes/painel/HomeClientes"),
+        children: [
+          {
+            path: "Agendar",
+            name: "Agendar",
+            beforeEnter: guardaRota,
+            component: () => import("@/views/clientes/painel/tabs/Agendar"),
+          },
+          {
+            path: "Profissionais",
+            name: "Profissionais",
+            beforeEnter: guardaRota,
+            component: () =>
+              import("@/views/clientes/painel/tabs/Profissionais"),
+          },
+          {
+            path: "Servicos",
+            name: "Servicos",
+            beforeEnter: guardaRota,
+            component: () => import("@/views/clientes/painel/tabs/Servicos"),
+          },
+        ],
+      },
+      {
+        path: "MinhaAgenda",
+        name: "MinhaAgenda",
+        beforeEnter: guardaRota,
+        component: () => import("@/views/clientes/painel/MinhaAgenda"),
+      },
+      {
+        path: "PerfilCliente",
+        name: "PerfilCliente",
+        beforeEnter: guardaRota,
+        component: () => import("@/views/clientes/painel/PerfilCliente"),
       },
     ],
   },
