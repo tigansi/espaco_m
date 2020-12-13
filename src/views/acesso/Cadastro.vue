@@ -88,6 +88,7 @@ import {
 } from "ionicons/icons";
 import { toastController } from "@ionic/core";
 import { loadingController } from "@ionic/core";
+import { alertController } from "@ionic/core";
 import Provider from "@/services/provider";
 
 addIcons({
@@ -108,12 +109,12 @@ export default {
   data() {
     return {
       form: {
-        nome: "Tiago Igansi",
-        celular: "(53) 98417-2482",
-        email: "tiagoigansi17@gmail.com",
-        aniversario: "06-11-1996",
-        senha: "123456",
-        senha2: "123456",
+        nome: "",
+        celular: "",
+        email: "",
+        aniversario: "",
+        senha: "",
+        senha2: "",
       },
     };
   },
@@ -163,18 +164,19 @@ export default {
                         if (res.data.sucesso) {
                           this.inicializa();
                           loading.dismiss();
-                          this.presentToast(res.data.msg);
+                          //this.presentToast(res.data.msg);
+                          this.alertaSucesso(res.data.msg, "Sucesso");
                         } else {
                           loading.dismiss();
-                          this.presentToast(res.data.msg);
+                          this.alertaSucesso(res.data.msg, "Problemas !!!");
                           console.log(res.data.msg);
                         }
                       })
                       .catch((error) => {
                         loading.dismiss();
-                        this.presentToast(
-                          "danger",
-                          "Ocorreu um erro com o servidor. Contate o suporte"
+                        this.alertaSucesso(
+                          "Ocorreu um erro com o servidor. Contate o suporte",
+                          "Erro !!!"
                         );
                         console.log("TIMEOUT " + error);
                       });
@@ -195,6 +197,16 @@ export default {
         cssClass: "ion-toast",
       });
       toast.present();
+    },
+    async alertaSucesso(msg, tipo) {
+      const alert = await alertController.create({
+        cssClass: "my-custom-class",
+        header: tipo,
+        message: msg,
+        buttons: ["OK"],
+      });
+
+      await alert.present();
     },
     inicializa() {
       this.form.nome = "";

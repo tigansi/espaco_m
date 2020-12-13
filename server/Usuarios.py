@@ -100,7 +100,8 @@ class Usuarios:
                         email,   
                         to_char(aniversario, %s) as aniversario,   
                         celular,
-                        tipo                
+                        tipo,
+                        foto                
                     FROM 
                         usuarios 
                     WHERE 
@@ -124,6 +125,84 @@ class Usuarios:
             else:
                 """O usuário não existe"""
                 resul = {"msg": "Usuário não encontrado",  "sucesso: ": False}
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
+    def altera_dados(self, data: list, caminho: str) -> {}:
+        """Método que realiza a alteração dos dados do usuário"""
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+            where = list()
+
+            if(data["nome"] != ""):
+                where.append("nm_usuario = '" + str(data["nome"]) + "'")
+
+            if(data["celular"] != ""):
+                where.append("celular = '" + str(data["celular"]) + "'")
+
+            if(data["senha"] != ""):
+                # A senha tem que ser criptografada para ser vista no banco
+                senha_cript = hashlib.md5(
+                    data["senha"].encode('utf8')).hexdigest()
+                where.append("senha = '" + str(senha_cript) + "'")
+
+            if(caminho != ""):
+                where.append("foto = '" + str(caminho) + "'")
+
+            if(len(where) > 1):
+                # Junção das strings quando tem mais de uma alteração
+                condi = (",".join(where))
+            else:
+                condi = where[0]
+
+            sql = "UPDATE usuarios SET " + str(condi) + " WHERE id_usuario = %s"
+
+            
+            print(sql)
+            
+            val = (str(data['id']), )
+            curso.execute(sql, val)
+            banco.commit()
+
+            print("Alteração realizada")
+
+            """
+            Após a alteração dos dados, é necessário agora recarregar as 
+            informações do usuário, para que fique correto no aplicativo
+            """
+
+            # Serve para ajuste da data de nascimento
+            PARAM_DATA = str("dd/mm/YYYY")
+
+            sql = """SELECT  
+                        id_usuario,
+                        nm_usuario,
+                        email,   
+                        to_char(aniversario, %s) as aniversario,   
+                        celular,
+                        tipo,
+                        foto                
+                    FROM 
+                        usuarios 
+                    WHERE 
+                        id_usuario = %s"""
+
+            print("Listagem")
+
+            val = (PARAM_DATA, str(data['id']))
+            curso.execute(sql, val)
+            dad = curso.fetchall()
+
+            resul = {"msg": "Alterações realizadas com sucesso",
+                     "dados": dad, "sucesso": True}
+
         except (Exception, psycopg2.Error) as error:
             resul = {"msg": str(error), "sucesso": False}
 
