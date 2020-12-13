@@ -120,7 +120,11 @@ export default {
                   JSON.stringify(res.data.dados[0])
                 );
                 loading.dismiss();
-                this.$router.push("HomePainelClientes/HomeClientes/Agendar");
+                if (res.data.dados[0].tipo == "CLI") {
+                  this.$router.push("HomePainelClientes/HomeClientes/Agendar");
+                }else{
+                  this.$router.push("/EscolhaPapel");
+                }
               } else {
                 loading.dismiss();
                 this.presentToast(res.data.msg);

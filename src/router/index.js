@@ -31,6 +31,12 @@ const routes = [
     component: () => import("@/views/acesso/Cadastro"),
   },
   {
+    path: "/EscolhaPapel",
+    name: "EscolhaPapel",
+    beforeEnter: guardaRota,
+    component: () => import("@/views/acesso/EscolhaPapel"),
+  },
+  {
     path: "/HomePainelClientes",
     name: "HomePainelClientes",
     beforeEnter: guardaRota,
