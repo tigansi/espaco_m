@@ -36,6 +36,12 @@ def usuarios():
         elif(data["tipo"] == "cad_usuario"):
             return json.dumps(usuarios.cadastro_usuario(data))
 
+        elif(data["tipo"] == "lista_colaboradores"):
+            return json.dumps(usuarios.lista_colaboradores(data))
+
+        elif(data["tipo"] == "desliga_user"):
+            pass
+
 
 @app.route("/altera_dados", methods=["POST"])
 def altera_dados():

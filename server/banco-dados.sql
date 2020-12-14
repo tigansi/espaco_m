@@ -7,5 +7,6 @@ create table usuarios
 	aniversario date 	     not null,
 	senha       text 	     not null,
 	foto        text         default './Fotos/avatar.png',
-	tipo	    varchar(10)  default 'CLI'	
+	tipo	    varchar(10)  default 'CLI',
+	is_ativo    boolean default 'true'
 );

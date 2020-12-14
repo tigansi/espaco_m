@@ -83,6 +83,51 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/HomePainelAdm",
+    name: "HomePainelAdm",
+    beforeEnter: guardaRota,
+    component: () => import("@/views/administrador/HomePainelAdm"),
+    children: [
+      {
+        path: "PainelPessoal",
+        name: "PainelPessoal",
+        beforeEnter: guardaRota,
+        component: () => import("@/views/administrador/painel/PainelPessoal"),
+        children: [
+          {
+            path: "CadastrarPessoas",
+            name: "CadastrarPessoas",
+            component: () =>
+              import(
+                "@/views/administrador/painel/tabsPessoal/CadastrarPessoas"
+              ),
+          },
+          {
+            path: "ListagemPessoas",
+            name: "ListagemPessoas",
+            component: () =>
+              import(
+                "@/views/administrador/painel/tabsPessoal/ListagemPessoas"
+              ),
+          },
+        ],
+      },
+      {
+        path: "PainelServicos",
+        name: "PainelServicos",
+        beforeEnter: guardaRota,
+        component: () => import("@/views/administrador/painel/PainelServicos"),
+      },
+      {
+        path: "PainelRelatorios",
+        name: "PainelRelatorios",
+        beforeEnter: guardaRota,
+        component: () =>
+          import("@/views/administrador/painel/PainelRelatorios"),
+      },
+    ],
+  },
 ];
 
 const router = new IonicVueRouter({
