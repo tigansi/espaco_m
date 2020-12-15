@@ -157,6 +157,7 @@ export default {
                       email: this.form.email,
                       aniversario: this.form.aniversario,
                       senha: this.form.senha,
+                      tp: "CLI",
                     };
 
                     Provider.provider("usuarios", JSON.stringify(dados))
