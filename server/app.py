@@ -7,6 +7,7 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
 from Usuarios import Usuarios
+from Servicos import Servicos
 
 import os
 import json
@@ -95,11 +96,40 @@ def altera_dados():
 def fotos():
     if(request.method == "GET"):
         cam = request.args.get("caminho")
-
         if(cam == "./Fotos/avatar.png"):
             return send_file(cam, mimetype='image/png', cache_timeout=0)
         else:
             return send_file(cam, mimetype='image/jpg', cache_timeout=0)
+
+
+@app.route("/categorias", methods=["POST"])
+def categorias():
+    if(request.method == "POST"):
+        data = json.loads(request.get_data())
+        serv = Servicos()
+        if(data["tipo"] == "cad_cat"):
+            return json.dumps(serv.cadastra_categoria(data))
+
+        elif(data["tipo"] == "list_cat"):
+            return json.dumps(serv.lista_categorias())
+
+        elif(data["tipo"] == "del_cat"):
+            return json.dumps(serv.desativa_categoria(data))
+
+
+@app.route("/servicos", methods=["POST"])
+def servicos():
+    if(request.method == "POST"):
+        data = json.loads(request.get_data())
+        serv = Servicos()
+        if(data["tipo"] == "cad_serv"):
+            return json.dumps(serv.cadastra_servicos(data))
+
+        elif(data["tipo"] == "list_serv"):
+            return json.dumps(serv.lista_servicos())
+
+        elif(data["tipo"] == "del_serv"):
+            return json.dumps(serv.desativa_servico(data))
 
 
 if __name__ == '__main__':

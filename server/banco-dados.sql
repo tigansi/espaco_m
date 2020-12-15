@@ -10,3 +10,20 @@ create table usuarios
 	tipo	    varchar(10)  default 'CLI',
 	is_ativo    boolean default 'true'
 );
+
+create table servicos
+(
+	id_servico serial,
+	nm_servico varchar(100) not null,
+	categoria  varchar(100) not null,
+	duracao    varchar(10)  not null,
+	valor      varchar(30)  not null,
+	is_ativo   boolean default true
+);
+
+create table categorias
+(
+	id_categoria serial,
+	nm_categoria varchar(100) not null,
+	is_ativo     boolean default true
+);

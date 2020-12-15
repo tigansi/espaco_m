@@ -21,9 +21,11 @@
           </ion-item>
           <ion-item
             button
-            @click="$router.push('/HomePainelAdm/PainelServicos')"
+            @click="
+              $router.push('/HomePainelAdm/PainelServicos/CadastrarCategorias')
+            "
           >
-            <ion-icon slot="start" name="book"></ion-icon>
+            <ion-icon slot="start" name="cut"></ion-icon>
             <ion-label>
               <span>Painel de serviços</span>
             </ion-label>

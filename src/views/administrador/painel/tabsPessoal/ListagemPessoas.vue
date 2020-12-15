@@ -8,11 +8,11 @@
               <ion-card-header>
                 <ion-grid>
                   <ion-row>
-                    <ion-col size="8" size-sm size-md="9">
+                    <ion-col size-md="10" size-sm="10">
                       <ion-card-subtitle>Bem vindo(a)</ion-card-subtitle>
                       <ion-card-title>{{ nome_adm }} </ion-card-title>
                     </ion-col>
-                    <ion-col size="4" size-sm size-md="3">
+                    <ion-col>
                       <center>
                         <ion-avatar>
                           <ion-img

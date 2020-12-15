@@ -118,6 +118,26 @@ const routes = [
         name: "PainelServicos",
         beforeEnter: guardaRota,
         component: () => import("@/views/administrador/painel/PainelServicos"),
+        children: [
+          {
+            path: "CadastrarCategorias",
+            name: "CadastrarCategorias",
+            beforeEnter: guardaRota,
+            component: () =>
+              import(
+                "@/views/administrador/painel/tabsServicos/CadastrarCategorias"
+              ),
+          },
+          {
+            path: "CadastrarServicos",
+            name: "CadastrarServicos",
+            beforeEnter: guardaRota,
+            component: () =>
+              import(
+                "@/views/administrador/painel/tabsServicos/CadastrarServicos.vue"
+              ),
+          },
+        ],
       },
       {
         path: "PainelRelatorios",

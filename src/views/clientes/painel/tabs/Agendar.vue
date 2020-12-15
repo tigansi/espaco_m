@@ -5,7 +5,7 @@
         <ion-card-header>
           <ion-grid>
             <ion-row>
-              <ion-col size="8" size-sm>
+              <ion-col size-md="9" size-sm>
                 <ion-card-subtitle>Bem vindo(a)</ion-card-subtitle>
                 <ion-card-title>{{ nome }} </ion-card-title>
               </ion-col>

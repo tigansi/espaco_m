@@ -8,7 +8,7 @@
               <ion-card-header>
                 <ion-grid>
                   <ion-row>
-                    <ion-col size="8" size-sm>
+                    <ion-col size-md="9" size-sm="9">
                       <ion-card-subtitle>Bem vindo(a)</ion-card-subtitle>
                       <ion-card-title>{{ nome_adm }} </ion-card-title>
                     </ion-col>
@@ -26,6 +26,39 @@
                   </ion-row>
                 </ion-grid>
               </ion-card-header>
+            </ion-card>
+
+            <ion-card style="background-color:white">
+              <ion-card-content>
+                <ion-list>
+                  <ion-list-header>
+                    <h1>Equipe</h1>
+                  </ion-list-header>
+                  <div v-for="col of colaboradores" :key="col.id_usuario">
+                    <ion-item>
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col size-md="9" size-sm="9">{{
+                            col.nm_usuario
+                          }}</ion-col>
+                          <ion-col>
+                            <center>
+                              <ion-avatar>
+                                <ion-img
+                                  :src="
+                                    'http://192.168.8.7:5000/fotos?caminho=' +
+                                      col.foto
+                                  "
+                                ></ion-img>
+                              </ion-avatar>
+                            </center>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-item>
+                  </div>
+                </ion-list>
+              </ion-card-content>
             </ion-card>
           </ion-col>
           <ion-col>
@@ -123,6 +156,7 @@ export default {
       },
       foto: "",
       nome_adm: "",
+      colaboradores: [],
     };
   },
   methods: {
@@ -168,6 +202,7 @@ export default {
                       if (res.data.sucesso) {
                         this.inicializa();
                         loading.dismiss();
+                        this.listaColaboradores();
                         this.alertaSucesso(res.data.msg, "Sucesso");
                       } else {
                         loading.dismiss();
@@ -205,6 +240,26 @@ export default {
       });
       toast.present();
     },
+    listaColaboradores() {
+      let dados = {
+        tipo: "lista_colaboradores",
+        nome: "",
+        email: "",
+        status: "",
+        tp: "COL",
+      };
+      Provider.provider("usuarios", JSON.stringify(dados))
+        .then((res) => {
+          if (res.data.sucesso) {
+            this.colaboradores = res.data.dados;
+          } else {
+            this.presentToast(res.data.msg);
+          }
+        })
+        .catch((error) => {
+          console.log("TIMEOUT " + error);
+        });
+    },
     inicializa() {
       this.form.nome = "";
       this.form.celular = "";
@@ -218,6 +273,7 @@ export default {
     var dados = JSON.parse(localStorage.getItem("isLogado"));
     this.nome_adm = dados.nm_usuario;
     this.foto = dados.foto;
+    this.listaColaboradores();
   },
 };
 </script>

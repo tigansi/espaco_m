@@ -27,7 +27,11 @@ import {
   addCircle,
   checkmarkDone,
   personAdd,
-  personRemove
+  personRemove,
+  cut,
+  trash,
+  stopwatch,
+  cash,
 } from "ionicons/icons";
 addIcons({
   "md-person": person,
@@ -58,8 +62,16 @@ addIcons({
   "ios-checkmark-done": checkmarkDone,
   "md-person-add": personAdd,
   "ios-person-add": personAdd,
-  "md-person-remove":personRemove,
-  "ios-person-remove":personRemove
+  "md-person-remove": personRemove,
+  "ios-person-remove": personRemove,
+  "md-cut": cut,
+  "ios-cut": cut,
+  "md-trash": trash,
+  "ios-trash": trash,
+  "md-stopwatch": stopwatch,
+  "ios-stopwatch": stopwatch,
+  "md-cash": cash,
+  "ios-cash": cash,
 });
 export default {
   components: {
