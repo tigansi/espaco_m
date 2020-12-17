@@ -11,7 +11,14 @@
           <ion-row>
             <ion-col size-md="4" class="ion-hide-xl-down"> </ion-col>
             <ion-col size-sm="12" size-md="4">
-              <div class="box">
+              <div
+                @click="
+                  $router.push(
+                    'HomePainelColaborador/HomeAgenda/Agenda'
+                  )
+                "
+                class="box"
+              >
                 <ion-icon size="large" name="cut"></ion-icon><br />
                 Acessar como funcionário
               </div>

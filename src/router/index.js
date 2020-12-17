@@ -148,6 +148,36 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/HomePainelColaborador",
+    name: "HomePainelColaborador",
+    beforeEnter: guardaRota,
+    component: () => import("@/views/colaborador/HomePainelColaborador"),
+    children: [
+      {
+        path: "HomeAgenda",
+        name: "HomeAgenda",
+        beforeEnter: guardaRota,
+        component: () => import("@/views/colaborador/painel/HomeAgenda"),
+        children: [
+          {
+            path: "Agenda",
+            name: "Agenda",
+            beforeEnter: guardaRota,
+            component: () =>
+              import("@/views/colaborador/painel/tabsAgenda/Agenda"),
+          },
+          {
+            path: "ConfigAgenda",
+            name: "ConfigAgenda",
+            beforeEnter: guardaRota,
+            component: () =>
+              import("@/views/colaborador/painel/tabsAgenda/ConfigAgenda"),
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 const router = new IonicVueRouter({

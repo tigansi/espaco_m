@@ -27,3 +27,13 @@ create table categorias
 	nm_categoria varchar(100) not null,
 	is_ativo     boolean default true
 );
+
+
+create table horarios
+(
+	id_horario 		serial unique,
+	id_servico 		int,
+	id_usuario      int,
+	data            timestamp default current_timestamp,
+	is_ativo 		boolean   default true
+);

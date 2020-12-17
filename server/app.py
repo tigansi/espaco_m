@@ -8,6 +8,7 @@ from werkzeug.utils import secure_filename
 
 from Usuarios import Usuarios
 from Servicos import Servicos
+from Horarios import Horarios
 
 import os
 import json
@@ -132,8 +133,17 @@ def servicos():
             return json.dumps(serv.desativa_servico(data))
 
 
+@app.route("/horarios", methods=["POST"])
+def horarios():
+    if(request.method == "POST"):
+        data = json.loads(request.get_data())
+        hora = Horarios()
+        if(data["tipo"] == "cad_hor"):
+            return json.dumps(hora.cadastra_horario(data))
+
+
 if __name__ == '__main__':
     app.run(
         debug=True,
-        host="192.168.8.7")
+        host="192.168.1.166")
     app.config['TEMPLATES_AUTORELOAD'] = True
