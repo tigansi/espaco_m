@@ -141,9 +141,15 @@ def horarios():
         if(data["tipo"] == "cad_hor"):
             return json.dumps(hora.cadastra_horario(data))
 
+        elif(data["tipo"] == "monta_grad_hor"):
+            return json.dumps(hora.monta_grade_horarios(data))
+
+        elif(data["tipo"] == "list_hor"):
+            return json.dumps(hora.lista_horarios(data))
+
 
 if __name__ == '__main__':
     app.run(
         debug=True,
-        host="192.168.1.166")
+        host="192.168.8.7")
     app.config['TEMPLATES_AUTORELOAD'] = True
