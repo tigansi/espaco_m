@@ -11,17 +11,35 @@
           <ion-row>
             <ion-col size-md="4" class="ion-hide-xl-down"> </ion-col>
             <ion-col size-sm="12" size-md="4">
-              <div class="box">
+              <div
+                @click="
+                  $router.push(
+                    'HomePainelColaborador/HomeAgenda/Agenda'
+                  )
+                "
+                class="box"
+              >
                 <ion-icon size="large" name="cut"></ion-icon><br />
                 Acessar como funcionário
               </div>
               <br />
-              <div class="box">
+              <div
+                class="box"
+                @click="
+                  $router.push('/HomePainelClientes/HomeClientes/Agendar')
+                "
+              >
                 <ion-icon size="large" name="bag"></ion-icon><br />
                 Acessar como cliente
               </div>
               <br />
-              <div class="box" v-if="tipo == 'ADM'">
+              <div
+                class="box"
+                v-if="tipo == 'ADM'"
+                @click="
+                  $router.push('HomePainelAdm/PainelPessoal/CadastrarPessoas')
+                "
+              >
                 <ion-icon size="large" name="laptop"></ion-icon><br />
                 Acessar como administrador
               </div>

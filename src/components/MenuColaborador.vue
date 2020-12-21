@@ -11,31 +11,23 @@
         <ion-menu-toggle auto-hide="false">
           <ion-item
             button
-            @click="$router.push('/HomePainelClientes/HomeClientes/Agendar')"
-          >
-            <ion-icon slot="start" name="home"></ion-icon>
-            <ion-label>
-              <span>Início</span>
-            </ion-label>
-          </ion-item>
-          <ion-item
-            button
-            @click="$router.push('/HomePainelClientes/PerfilCliente')"
-          >
-            <ion-icon slot="start" name="person"></ion-icon>
-            <ion-label>
-              <span>Perfil do cliente</span>
-            </ion-label>
-          </ion-item>
-          <ion-item
-            button
-            @click="$router.push('/HomePainelClientes/MinhaAgenda')"
+            @click="$router.push('/HomePainelColaborador/HomeAgenda/Agenda')"
           >
             <ion-icon slot="start" name="calendar"></ion-icon>
             <ion-label>
-              <span>Minha agenda</span>
+              <span>Meus agendamentos</span>
             </ion-label>
           </ion-item>
+          <ion-item
+            button
+            @click="$router.push('/HomePainelColaborador/PerfilColaborador')"
+          >
+            <ion-icon slot="start" name="person"></ion-icon>
+            <ion-label>
+              <span>Perfil do colaborador</span>
+            </ion-label>
+          </ion-item>
+
           <ion-item button @click="logOut()">
             <ion-icon slot="start" name="exit"></ion-icon>
             <ion-label>
@@ -80,5 +72,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

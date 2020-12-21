@@ -83,6 +83,107 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/HomePainelAdm",
+    name: "HomePainelAdm",
+    beforeEnter: guardaRota,
+    component: () => import("@/views/administrador/HomePainelAdm"),
+    children: [
+      {
+        path: "PainelPessoal",
+        name: "PainelPessoal",
+        beforeEnter: guardaRota,
+        component: () => import("@/views/administrador/painel/PainelPessoal"),
+        children: [
+          {
+            path: "CadastrarPessoas",
+            name: "CadastrarPessoas",
+            component: () =>
+              import(
+                "@/views/administrador/painel/tabsPessoal/CadastrarPessoas"
+              ),
+          },
+          {
+            path: "ListagemPessoas",
+            name: "ListagemPessoas",
+            component: () =>
+              import(
+                "@/views/administrador/painel/tabsPessoal/ListagemPessoas"
+              ),
+          },
+        ],
+      },
+      {
+        path: "PainelServicos",
+        name: "PainelServicos",
+        beforeEnter: guardaRota,
+        component: () => import("@/views/administrador/painel/PainelServicos"),
+        children: [
+          {
+            path: "CadastrarCategorias",
+            name: "CadastrarCategorias",
+            beforeEnter: guardaRota,
+            component: () =>
+              import(
+                "@/views/administrador/painel/tabsServicos/CadastrarCategorias"
+              ),
+          },
+          {
+            path: "CadastrarServicos",
+            name: "CadastrarServicos",
+            beforeEnter: guardaRota,
+            component: () =>
+              import(
+                "@/views/administrador/painel/tabsServicos/CadastrarServicos.vue"
+              ),
+          },
+        ],
+      },
+      {
+        path: "PainelRelatorios",
+        name: "PainelRelatorios",
+        beforeEnter: guardaRota,
+        component: () =>
+          import("@/views/administrador/painel/PainelRelatorios"),
+      },
+    ],
+  },
+  {
+    path: "/HomePainelColaborador",
+    name: "HomePainelColaborador",
+    beforeEnter: guardaRota,
+    component: () => import("@/views/colaborador/HomePainelColaborador"),
+    children: [
+      {
+        path: "HomeAgenda",
+        name: "HomeAgenda",
+        beforeEnter: guardaRota,
+        component: () => import("@/views/colaborador/painel/HomeAgenda"),
+        children: [
+          {
+            path: "Agenda",
+            name: "Agenda",
+            beforeEnter: guardaRota,
+            component: () =>
+              import("@/views/colaborador/painel/tabsAgenda/Agenda"),
+          },
+          {
+            path: "ConfigAgenda",
+            name: "ConfigAgenda",
+            beforeEnter: guardaRota,
+            component: () =>
+              import("@/views/colaborador/painel/tabsAgenda/ConfigAgenda"),
+          },
+        ],
+      },
+      {
+        path: "PerfilColaborador",
+        name: "PerfilColaborador",
+        beforeEnter: guardaRota,
+        component: () => import("@/views/colaborador/painel/PerfilColaborador"),
+      },
+    ],
+  },
 ];
 
 const router = new IonicVueRouter({

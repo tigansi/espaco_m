@@ -5,35 +5,38 @@
         <ion-title>Espaço M</ion-title>
       </ion-toolbar>
     </ion-header>
-
     <ion-content>
       <ion-list>
         <ion-menu-toggle auto-hide="false">
           <ion-item
             button
-            @click="$router.push('/HomePainelClientes/HomeClientes/Agendar')"
+            @click="
+              $router.push('/HomePainelAdm/PainelPessoal/CadastrarPessoas')
+            "
           >
-            <ion-icon slot="start" name="home"></ion-icon>
+            <ion-icon slot="start" name="people"></ion-icon>
             <ion-label>
-              <span>Início</span>
+              <span>Painel de Pessoal</span>
             </ion-label>
           </ion-item>
           <ion-item
             button
-            @click="$router.push('/HomePainelClientes/PerfilCliente')"
+            @click="
+              $router.push('/HomePainelAdm/PainelServicos/CadastrarCategorias')
+            "
           >
-            <ion-icon slot="start" name="person"></ion-icon>
+            <ion-icon slot="start" name="cut"></ion-icon>
             <ion-label>
-              <span>Perfil do cliente</span>
+              <span>Painel de serviços</span>
             </ion-label>
           </ion-item>
           <ion-item
             button
-            @click="$router.push('/HomePainelClientes/MinhaAgenda')"
+            @click="$router.push('/HomePainelAdm/PainelRelatorios')"
           >
-            <ion-icon slot="start" name="calendar"></ion-icon>
+            <ion-icon slot="start" name="bar-chart"></ion-icon>
             <ion-label>
-              <span>Minha agenda</span>
+              <span>Painel de relatórios</span>
             </ion-label>
           </ion-item>
           <ion-item button @click="logOut()">
@@ -80,5 +83,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

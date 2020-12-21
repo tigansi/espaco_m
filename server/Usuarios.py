@@ -45,22 +45,22 @@ class Usuarios:
                 o cadastro é realizado
                 """
 
-                # A senha será gravada no banco de forma criptografada
+                # A senha tem que ser criptografada para ser vista no banco
                 senha_cript = hashlib.md5(
                     data["senha"].encode('utf8')).hexdigest()
 
                 sql = """INSERT
                             INTO
-                        usuarios(
-                            nm_usuario,
-                            email,
-                            celular,
-                            aniversario,
-                            senha)
-                        VALUES(%s, %s, %s, %s, %s)"""
+                                usuarios(nm_usuario,
+                                         email,
+                                         celular,
+                                         aniversario,
+                                         senha,
+                                         tipo)
+                            VALUES(%s,%s,%s,%s,%s,%s)"""
 
                 val = (data["nome"], data["email"], data["celular"],
-                       data["aniversario"], senha_cript)
+                       data["aniversario"], senha_cript, data["tp"])
 
                 curso.execute(sql, val)
                 banco.commit()
@@ -94,18 +94,18 @@ class Usuarios:
             # Serve para ajuste da data de nascimento
             PARAM_DATA = str("dd/mm/YYYY")
 
-            sql = """SELECT  
+            sql = """SELECT
                         id_usuario,
                         nm_usuario,
-                        email,   
-                        to_char(aniversario, %s) as aniversario,   
+                        email,
+                        to_char(aniversario, %s) as aniversario,
                         celular,
                         tipo,
-                        foto                
-                    FROM 
-                        usuarios 
-                    WHERE 
-                        email = %s AND 
+                        foto
+                    FROM
+                        usuarios
+                    WHERE
+                        email = %s AND
                         senha = %s"""
 
             # A senha tem que ser criptografada para ser vista no banco
@@ -162,11 +162,11 @@ class Usuarios:
             else:
                 condi = where[0]
 
-            sql = "UPDATE usuarios SET " + str(condi) + " WHERE id_usuario = %s"
+            sql = "UPDATE usuarios SET " + \
+                str(condi) + " WHERE id_usuario = %s"
 
-            
             print(sql)
-            
+
             val = (str(data['id']), )
             curso.execute(sql, val)
             banco.commit()
@@ -174,24 +174,24 @@ class Usuarios:
             print("Alteração realizada")
 
             """
-            Após a alteração dos dados, é necessário agora recarregar as 
+            Após a alteração dos dados, é necessário agora recarregar as
             informações do usuário, para que fique correto no aplicativo
             """
 
             # Serve para ajuste da data de nascimento
             PARAM_DATA = str("dd/mm/YYYY")
 
-            sql = """SELECT  
+            sql = """SELECT
                         id_usuario,
                         nm_usuario,
-                        email,   
-                        to_char(aniversario, %s) as aniversario,   
+                        email,
+                        to_char(aniversario, %s) as aniversario,
                         celular,
                         tipo,
-                        foto                
-                    FROM 
-                        usuarios 
-                    WHERE 
+                        foto
+                    FROM
+                        usuarios
+                    WHERE
                         id_usuario = %s"""
 
             print("Listagem")
@@ -202,6 +202,105 @@ class Usuarios:
 
             resul = {"msg": "Alterações realizadas com sucesso",
                      "dados": dad, "sucesso": True}
+
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
+    def lista_colaboradores(self, data: list) -> {}:
+        """
+        Método que faz a busca dos usuários com base
+        nos filtros do administrador
+        """
+
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+            where = list()
+
+            if(data["nome"] != ""):
+                where.append("nm_usuario LIKE '%" + str(data["nome"]) + "%'")
+
+            if(data["email"] != ""):
+                where.append("email LIKE '%" + str(data["email"]) + "%'")
+
+            if(data["status"] != ""):
+                where.append("is_ativo ='" + str(data["status"]) + "'")
+
+            if(data["tp"] != ""):
+                where.append("tipo LIKE '%" + str(data["tp"]) + "%'")
+
+            # Junção das strings
+            condi = (" and ".join(where))
+
+            sql = """SELECT
+                        id_usuario,
+                        nm_usuario,
+                        email,
+                        foto,
+                        tipo
+                    FROM
+                        usuarios WHERE """ + str(condi)
+
+            curso.execute(sql)
+            dad = curso.fetchall()
+
+            # Momento de realizar a contagem do dados
+
+            sql = """SELECT 
+                        count(*) as qtd 
+                    FROM 
+                        usuarios 
+                    WHERE """ + str(condi)
+
+            curso.execute(sql)
+            tot = curso.fetchall()
+
+            resul = {"msg": "Dados encontrados",
+                     "sucesso": True, "dados": dad, "total": tot}
+
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
+    def desliga_user(self, data: list) -> {}:
+        """Método que demite o usuário"""
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+
+            # Se o usuário for funcionário,
+            # Será feito o rebaixamento dele para cliente
+            # Se for cliente, impedido de usar o aplicativo
+
+            if(data["tp"] == "COL" or data["tp"] == "ADM"):
+                sql = """UPDATE 
+                            usuarios 
+                        SET 
+                            tipo = 'CLI'
+                        WHERE id_usuario = %s"""
+            else:
+                sql = """UPDATE 
+                            usuarios 
+                        SET 
+                            is_ativo = '0'
+                        WHERE id_usuario = %s"""
+
+            val = (str(data["id"]), )
+            curso.execute(sql, val)
+            banco.commit()
+
+            resul = {"msg": "Usuário desligado com sucesso", "sucesso": True}
 
         except (Exception, psycopg2.Error) as error:
             resul = {"msg": str(error), "sucesso": False}
