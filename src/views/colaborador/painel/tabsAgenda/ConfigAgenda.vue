@@ -3,31 +3,7 @@
     <ion-content id="page">
       <ion-grid>
         <ion-row>
-          <!--<ion-col size="12">
-            <ion-card style="background-color:white">
-              <ion-card-header>
-                <ion-grid>
-                  <ion-row>
-                    <ion-col size-md="9" size-sm="9">
-                      <ion-card-subtitle>Bem vindo(a)</ion-card-subtitle>
-                      <ion-card-title>{{ nome_col }} </ion-card-title>
-                    </ion-col>
-                    <ion-col>
-                      <center>
-                        <ion-avatar>
-                          <ion-img
-                            :src="
-                              'http://192.168.8.7:5000/fotos?caminho=' + foto
-                            "
-                          ></ion-img>
-                        </ion-avatar>
-                      </center>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-              </ion-card-header>
-            </ion-card>
-          </ion-col> -->
+          <!-- -->
 
           <ion-col size="12" size-md="6">
             <ion-card style="background-color:white">
@@ -51,14 +27,13 @@
                         </div>
                       </IonSelectVue>
                     </ion-item>
-                    <!-- 
-                      <ion-item>
+
+                    <ion-item>
                       <ion-label position="floating"
                         >Tempo em minutos</ion-label
                       >
                       <IonInputVue readonly v-model="form.duracao" />
                     </ion-item>
-                    -->
                   </div>
                 </ion-list>
                 <ion-button @click="buscaGrade" size="block" id="btn_cad"
@@ -138,6 +113,7 @@
                             hr_banco.data
                           }}</ion-col>
                           <ion-col>
+                            <div v-show="hr_banco.is_ativo"></div>
                             <ion-button
                               @click="deletaHorario(hr_banco.id_horario)"
                               color="danger"
@@ -239,7 +215,24 @@ export default {
       this.buscaGrade();
     },
     deletaHorario(id_hor) {
-      id_hor;
+      console.log(id_hor);
+      let dados = {
+        tipo: "deleta_hor",
+        id_hor: id_hor,
+      };
+      Provider.provider("horarios", JSON.stringify(dados))
+        .then((res) => {
+          if (res.data.sucesso) {
+            this.hor_banco = [];
+            this.listaHorarios();
+            this.presentToast(res.data.msg);
+          }else{
+            this.presentToast(res.data.msg);
+          }
+        })
+        .catch((error) => {
+          console.log("TIMEOUT " + error);
+        });
     },
     efetuaCadastroAgenda() {
       let dados = {
@@ -254,6 +247,7 @@ export default {
           if (res.data.sucesso) {
             this.horarios = [];
             this.hor_selecionados = [];
+            this.listaHorarios();
             this.presentToast(res.data.msg);
           }
         })

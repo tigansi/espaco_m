@@ -176,6 +176,12 @@ const routes = [
           },
         ],
       },
+      {
+        path: "PerfilColaborador",
+        name: "PerfilColaborador",
+        beforeEnter: guardaRota,
+        component: () => import("@/views/colaborador/painel/PerfilColaborador"),
+      },
     ],
   },
 ];

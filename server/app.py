@@ -58,6 +58,7 @@ def altera_dados():
             data = json.loads(request.form["dados"])
             return json.dumps(usuarios.altera_dados(data, ""))
         else:
+            print("há foto")
             # Há foto
             # Variável com o dados do usuario
             data = json.loads(request.form["dados"])
@@ -79,6 +80,9 @@ def altera_dados():
                 file.save(os.path.join(
                     app.config['UPLOAD_PATH'] + "/" + str(data["id"]), filename))
 
+                caminho = app.config['UPLOAD_PATH'] + \
+                    '/' + str(data['id']) + "/" + str(filename)
+
             else:
                 dir = os.listdir("./Fotos/" + str(data["id"]))
                 for arq in dir:
@@ -90,7 +94,7 @@ def altera_dados():
                 caminho = app.config['UPLOAD_PATH'] + \
                     '/' + str(data['id']) + "/" + str(filename)
 
-                return json.dumps(usuarios.altera_dados(data, caminho))
+            return json.dumps(usuarios.altera_dados(data, caminho))
 
 
 @app.route("/fotos", methods=["GET"])
@@ -146,6 +150,12 @@ def horarios():
 
         elif(data["tipo"] == "list_hor"):
             return json.dumps(hora.lista_horarios(data))
+
+        elif(data["tipo"] == "limpa_hor"):
+            return json.dumps(hora.limpa_horarios(data))
+
+        elif(data["tipo"] == "deleta_hor"):
+            return json.dumps(hora.deleta_horarios(data))
 
 
 if __name__ == '__main__':

@@ -21,11 +21,15 @@ class Horarios:
             curso = banco.conectar()
 
             for i in data["hor_selecionados"]:
+                # data que irá para o banco em forma de string
                 data_banco_string = str(data["dia"]) + " " + str(i)
+                # Formato que será guardado
                 data_banco_format = '%Y-%m-%d %H:%M'
+                # Conversão para o formato do Python
                 data_banco_python = datetime.datetime.strptime(
                     data_banco_string, data_banco_format)
 
+                # Query do banco
                 sql = """INSERT 
                             INTO horarios(id_servico, 
                                           id_usuario,
@@ -61,9 +65,11 @@ class Horarios:
             PARAM_DATA = str("dd/mm/YYYY HH24:MI")
 
             sql = """SELECT 
+                        id_horario,
                         id_servico, 
                         id_usuario,
-                        to_char(data, %s) as data
+                        to_char(data, %s) as data,
+                        is_ativo
                     FROM 
                         horarios
                     WHERE
@@ -162,6 +168,37 @@ class Horarios:
                     resul = {
                         "msg": "Não há mais horários disponíveis para esse dia",
                         "sucesso": False}
+
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
+    def limpa_horarios(self, data: list) -> {}:
+        """Método responsável """
+        pass
+
+    def deleta_horarios(self, data: list) -> {}:
+        """Método que exclui o horário escolhido pelo colaborador"""
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+
+            sql = """DELETE FROM 
+                        horarios 
+                    WHERE 
+                        id_horario = %s AND 
+                        is_ativo = '1'"""
+
+            val = (data["id_hor"], )
+            curso.execute(sql, val)
+            banco.commit()
+
+            resul = {"msg": "Horário excluido com sucesso", "sucesso": True}
 
         except (Exception, psycopg2.Error) as error:
             resul = {"msg": str(error), "sucesso": False}

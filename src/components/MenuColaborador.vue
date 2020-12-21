@@ -11,7 +11,7 @@
         <ion-menu-toggle auto-hide="false">
           <ion-item
             button
-            @click="$router.push('/HomePainelClientes/HomeClientes/Agendar')"
+            @click="$router.push('/HomePainelColaborador/HomeAgenda/Agenda')"
           >
             <ion-icon slot="start" name="calendar"></ion-icon>
             <ion-label>
@@ -20,7 +20,7 @@
           </ion-item>
           <ion-item
             button
-            @click="$router.push('/HomePainelClientes/PerfilCliente')"
+            @click="$router.push('/HomePainelColaborador/PerfilColaborador')"
           >
             <ion-icon slot="start" name="person"></ion-icon>
             <ion-label>

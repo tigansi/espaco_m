@@ -18,7 +18,7 @@
         </ion-tab>
 
         <ion-tab-bar slot="bottom">
-          <ion-tab-button tab="Agenda" class="btn-tab" :to="{ name: 'Agenda' }">
+          <ion-tab-button tab="Agenda" :to="{ name: 'Agenda' }" class="btn-tab">
             <ion-icon name="calendar"></ion-icon>
             <ion-label>Agenda do dia</ion-label>
           </ion-tab-button>
@@ -38,14 +38,13 @@
 </template>
 
 <script>
-import Agenda from "./tabsAgenda/Agenda";
 import ConfigAgenda from "./tabsAgenda/ConfigAgenda";
+import Agenda from "./tabsAgenda/Agenda";
 
 export default {
   components: {
-    Agenda,
-
     ConfigAgenda,
+    Agenda,
   },
 };
 </script>
