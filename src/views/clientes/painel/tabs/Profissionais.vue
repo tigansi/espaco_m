@@ -19,9 +19,12 @@
                   <p>Funcionário(a)</p>
                 </ion-label>
 
-                <ion-buttons>
-                  <ion-button slot="end">Agendar</ion-button>
-                </ion-buttons>
+                <ion-button
+                  @click="mostraServicosProf(col.id_usuario, col.nm_usuario)"
+                  id="btn_agendar"
+                  slot="end"
+                  >Agendar</ion-button
+                >
               </ion-item>
             </div>
           </ion-list>
@@ -34,13 +37,29 @@
 <script>
 import Provider from "@/services/provider.js";
 import { toastController } from "@ionic/core";
+import ModalServicos from "./modal/ModalServicos";
 export default {
   data() {
     return {
+      id_cliente: "",
       colaboradores: [],
     };
   },
   methods: {
+    async mostraServicosProf(id_colaborador, nm_colaborador) {
+      console.log(id_colaborador);
+
+      let modal = await this.$ionic.modalController.create({
+        component: ModalServicos,
+        componentProps: {
+          propsData: {
+            id_colaborador: id_colaborador,
+            nm_colaborador: nm_colaborador,
+          },
+        },
+      });
+      modal.present();
+    },
     listaColaboradores() {
       let dados = {
         tipo: "lista_colaboradores",
@@ -73,6 +92,9 @@ export default {
     },
   },
   mounted() {
+    var dados = JSON.parse(localStorage.getItem("isLogado"));
+    this.id_cliente = dados.id_usuario;
+    console.log(this.id_cliente);
     this.listaColaboradores();
   },
 };
@@ -81,5 +103,11 @@ export default {
 <style>
 #page {
   --background: rgb(55, 52, 53);
+}
+
+#btn_agendar {
+  --background: rgb(60, 187, 178);
+  --background-activated: rgb(60, 187, 178);
+  --background-hover: rgb(60, 187, 178);
 }
 </style>

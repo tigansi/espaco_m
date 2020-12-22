@@ -109,9 +109,13 @@
                     <ion-item>
                       <ion-grid>
                         <ion-row>
-                          <ion-col size="9" size-md="10">{{
-                            hr_banco.data
-                          }}</ion-col>
+                          <ion-col size="9" size-md="10"
+                            >{{ hr_banco.data }}
+                            <br />
+                            <ion-card-subtitle>{{
+                              hr_banco.nm_servico
+                            }}</ion-card-subtitle>
+                          </ion-col>
                           <ion-col>
                             <div v-show="hr_banco.is_ativo"></div>
                             <ion-button
@@ -226,7 +230,7 @@ export default {
             this.hor_banco = [];
             this.listaHorarios();
             this.presentToast(res.data.msg);
-          }else{
+          } else {
             this.presentToast(res.data.msg);
           }
         })
@@ -264,6 +268,8 @@ export default {
         .then((res) => {
           if (res.data.sucesso) {
             this.hor_banco = res.data.dados;
+          } else {
+            console.log(res.data.msg);
           }
         })
         .catch((error) => {
