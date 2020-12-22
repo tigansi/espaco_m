@@ -160,6 +160,9 @@ def horarios():
         elif(data["tipo"] == "lista_serv_prof"):
             return json.dumps(hora.lista_serv_prof(data))
 
+        elif(data["tipo"] == "list_hor_serv_prof"):
+            return json.dumps(hora.list_hor_serv_prof(data))
+
 
 if __name__ == '__main__':
     app.run(

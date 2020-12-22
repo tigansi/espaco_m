@@ -26,7 +26,7 @@
               <ion-icon slot="end" name="calendar"></ion-icon>
             </ion-item>
           </ion-list>
-          <ion-button @click="listaHorarios()" expand="block" id="btn_cad"
+          <ion-button @click="buscaHorarios()" expand="block" id="btn_cad"
             >Mostrar horários</ion-button
           >
         </ion-card-content>
@@ -54,14 +54,17 @@ export default {
     modalClose() {
       this.$ionic.modalController.dismiss();
     },
-    listaHorarios() {
+    buscaHorarios() {
       let dados = {
-        tipo: "list_hor",
+        tipo: "list_hor_serv_prof",
         id_usuario: this.id_colab,
+        id_servico: this.id_servico,
+        dia: this.data,
       };
       Provider.provider("horarios", JSON.stringify(dados))
         .then((res) => {
           if (res.data.sucesso) {
+            console.log(res.data.dados);
             this.hor_banco = res.data.dados;
           } else {
             this.presentToast(res.data.msg);
