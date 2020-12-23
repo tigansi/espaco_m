@@ -282,7 +282,8 @@ class Horarios:
                         WHERE 
 	                        horarios.id_usuario = %s AND
                             horarios.id_servico = %s AND
-                            horarios.data::date = date %s
+                            horarios.data::date = date %s AND
+                            horarios.is_ativo = '1'
                         ORDER BY horarios.data asc"""
 
                 val = (data["id_usuario"], data["id_servico"], data["dia"])

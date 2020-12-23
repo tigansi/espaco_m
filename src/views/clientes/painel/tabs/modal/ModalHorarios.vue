@@ -5,8 +5,8 @@
         <ion-title style="color: white">Horários</ion-title>
         <ion-buttons slot="primary">
           <ion-button @click="modalClose()" style="color: white">
-            Sair
-            <ion-icon style="color: white" slot="" name="close"></ion-icon>
+            Voltar
+            <ion-icon style="color: white" slot="start" name="close"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
@@ -62,6 +62,7 @@
 <script>
 import { toastController, alertController } from "@ionic/core";
 import Provider from "@/services/provider.js";
+
 export default {
   props: ["id_servico", "id_col", "nm_col", "nm_ser"],
   data() {
@@ -84,6 +85,7 @@ export default {
         id_usuario: this.id_colab,
         id_servico: this.id_servico,
         dia: this.data,
+        id_cliente: "",
       };
       Provider.provider("horarios", JSON.stringify(dados))
         .then((res) => {
@@ -123,16 +125,32 @@ export default {
             text: "Confirmar",
             handler: () => {
               console.log("Confirm Okay");
-              /*let dados = {
+              let dados = {
                 tipo: "agenda_hor",
                 id_hor: id_hor,
-                id_
-              }*/
+                id_cli: this.id_cliente,
+              };
+              Provider.provider("agenda", JSON.stringify(dados)).then((res) => {
+                if (res.data.sucesso) {
+                  this.alertaSucesso("Sucesso", res.data.msg);
+                  this.$ionic.modalController.dismiss(true);
+                }
+              });
             },
           },
         ],
       });
       return alert.present();
+    },
+    async alertaSucesso(tipo, msg) {
+      const alert = await alertController.create({
+        cssClass: "my-custom-class",
+        header: tipo,
+        message: msg,
+        buttons: ["OK"],
+      });
+
+      await alert.present();
     },
     async presentToast(msg) {
       const toast = await toastController.create({
@@ -145,7 +163,10 @@ export default {
       toast.present();
     },
   },
-  mounted() {},
+  mounted() {
+    var dados = JSON.parse(localStorage.getItem("isLogado"));
+    this.id_cliente = dados.id_usuario;
+  },
 };
 </script>
 

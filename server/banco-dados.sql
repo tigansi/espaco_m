@@ -28,7 +28,6 @@ create table categorias
 	is_ativo     boolean default true
 );
 
-
 create table horarios
 (
 	id_horario 		serial unique,
@@ -36,4 +35,15 @@ create table horarios
 	id_usuario      int,
 	data            timestamp default current_timestamp,
 	is_ativo 		boolean   default true
+);
+
+create table agenda
+(
+	id_agenda	 serial unique,
+	id_horario 	 int unique,
+	id_cliente   int not null,
+	is_concluido boolean default false,
+	is_ativo     boolean default true,
+
+	foreign key(id_horario) references horarios (id_horario)
 );

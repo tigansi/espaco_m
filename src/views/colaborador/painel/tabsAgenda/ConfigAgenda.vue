@@ -51,7 +51,7 @@
                 <ion-grid>
                   <ion-row>
                     <div v-for="hor of horarios" :key="hor">
-                      <ion-col size-md="2" size-sm="2">
+                      <ion-col size-md="2" size-sm="3">
                         <ion-button
                           style="width:125px"
                           shape="round"
@@ -117,16 +117,25 @@
                             }}</ion-card-subtitle>
                           </ion-col>
                           <ion-col>
-                            <div v-show="hr_banco.is_ativo"></div>
-                            <ion-button
-                              @click="deletaHorario(hr_banco.id_horario)"
-                              color="danger"
-                            >
-                              <ion-icon
-                                slot="icon-only"
-                                name="trash"
-                              ></ion-icon>
-                            </ion-button>
+                            <div v-if="hr_banco.is_ativo">
+                              <ion-button
+                                @click="deletaHorario(hr_banco.id_horario)"
+                                color="danger"
+                              >
+                                <ion-icon
+                                  slot="icon-only"
+                                  name="trash"
+                                ></ion-icon>
+                              </ion-button>
+                            </div>
+                            <div v-else>
+                              <ion-button color="medium">
+                                <ion-icon
+                                  slot="icon-only"
+                                  name="check-mark-done-circle"
+                                ></ion-icon>
+                              </ion-button>
+                            </div>
                           </ion-col>
                         </ion-row>
                       </ion-grid>

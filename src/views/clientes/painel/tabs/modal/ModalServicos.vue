@@ -5,8 +5,8 @@
         <ion-title style="color: white">Serviços</ion-title>
         <ion-buttons slot="primary">
           <ion-button @click="modalClose()" style="color: white">
-            Sair
-            <ion-icon style="color: white" slot="" name="close"></ion-icon>
+            Voltar
+            <ion-icon style="color: white" slot="start" name="close"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
@@ -88,8 +88,6 @@ export default {
         });
     },
     async escolheServico(id_servico, nm_servico) {
-      id_servico;
-
       let modal = await this.$ionic.modalController.create({
         component: ModalHorarios,
         componentProps: {
@@ -102,8 +100,12 @@ export default {
         },
       });
       modal.present();
+
+      let res = await modal.onDidDismiss();
+      if (res.data) {
+        this.$ionic.modalController.dismiss();
+      }
     },
-    
   },
   mounted() {
     this.listaServicosProfissional();

@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 from Usuarios import Usuarios
 from Servicos import Servicos
 from Horarios import Horarios
+from Agenda import Agenda
 
 import os
 import json
@@ -162,6 +163,15 @@ def horarios():
 
         elif(data["tipo"] == "list_hor_serv_prof"):
             return json.dumps(hora.list_hor_serv_prof(data))
+
+
+@app.route("/agenda", methods=["POST"])
+def agenda():
+    if(request.method == "POST"):
+        data = json.loads(request.get_data())
+        agenda = Agenda()
+        if(data["tipo"] == "agenda_hor"):
+            return json.dumps(agenda.agenda_horario(data))
 
 
 if __name__ == '__main__':
