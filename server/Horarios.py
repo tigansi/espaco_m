@@ -233,7 +233,8 @@ class Horarios:
                     INNER JOIN 
 	                    horarios on 
 		                    servicos.id_servico = horarios.id_servico AND
-		                    horarios.id_usuario = %s"""
+		                    horarios.id_usuario = %s AND
+                            data >= current_timestamp"""
 
             val = (data["id_col"], )
             curso.execute(sql, val)
@@ -281,7 +282,7 @@ class Horarios:
                         WHERE 
 	                        horarios.id_usuario = %s AND
                             horarios.id_servico = %s AND
-                            horarios.data = %s
+                            horarios.data::date = date %s
                         ORDER BY horarios.data asc"""
 
                 val = (data["id_usuario"], data["id_servico"], data["dia"])

@@ -31,12 +31,36 @@
           >
         </ion-card-content>
       </ion-card>
+      <ion-card style="background-color:white">
+        <ion-card-header>
+          <ion-card-title class="ion-text-center"
+            >Lista de horários</ion-card-title
+          >
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <div v-for="hor of hor_banco" :key="hor.id_horario">
+                <ion-col size-md="2" size-sm="2">
+                  <ion-button
+                    @click="alertaConfirmaHorario(hor.id_horario, hor.data)"
+                    style="width:125px"
+                    shape="round"
+                    id="btn_hor"
+                    >{{ hor.data }}</ion-button
+                  >
+                </ion-col>
+              </div>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { toastController } from "@ionic/core";
+import { toastController, alertController } from "@ionic/core";
 import Provider from "@/services/provider.js";
 export default {
   props: ["id_servico", "id_col", "nm_col", "nm_ser"],
@@ -74,6 +98,42 @@ export default {
           console.log("TIMEOUT " + error);
         });
     },
+    async alertaConfirmaHorario(id_hor, hor) {
+      var servicos = "Serviço: " + this.nm_ser;
+      var horarios = "Horario: " + hor;
+      var profissi = "Profissional: " + this.nm_colab;
+
+      var msg = profissi + "<br>" + horarios + "<br>" + servicos;
+
+      const alert = await alertController.create({
+        cssClass: "my-custom-class",
+        header: "Atenção !",
+        subHeader: "Deseja confirmar ?",
+        message: msg,
+        buttons: [
+          {
+            text: "Cancelar",
+            role: "cancel",
+            cssClass: "secondary",
+            handler: (blah) => {
+              console.log("Confirm Cancel:", blah);
+            },
+          },
+          {
+            text: "Confirmar",
+            handler: () => {
+              console.log("Confirm Okay");
+              /*let dados = {
+                tipo: "agenda_hor",
+                id_hor: id_hor,
+                id_
+              }*/
+            },
+          },
+        ],
+      });
+      return alert.present();
+    },
     async presentToast(msg) {
       const toast = await toastController.create({
         message: msg,
@@ -94,7 +154,8 @@ export default {
   --background: rgb(55, 52, 53);
 }
 
-#btn_escolha {
+#btn_escolha,
+#btn_hor {
   --background: rgb(60, 187, 178);
   --background-activated: rgb(60, 187, 178);
   --background-hover: rgb(60, 187, 178);
