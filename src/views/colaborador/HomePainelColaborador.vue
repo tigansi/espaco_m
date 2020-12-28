@@ -23,6 +23,8 @@ import {
   mail,
   call,
   checkmarkDoneCircle,
+  play,
+  stop
 } from "ionicons/icons";
 
 addIcons({
@@ -46,6 +48,10 @@ addIcons({
   "ios-call": call,
   "md-check-mark-done-circle": checkmarkDoneCircle,
   "ios-check-mark-done-circle": checkmarkDoneCircle,
+  "md-play":play,
+  "ios-play":play,
+  "md-stop":stop,
+  "ios-stop":stop
 });
 
 export default {

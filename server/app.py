@@ -173,6 +173,18 @@ def agenda():
         if(data["tipo"] == "agenda_hor"):
             return json.dumps(agenda.agenda_horario(data))
 
+        elif(data["tipo"] == "list_agenda_prof"):
+            return json.dumps(agenda.list_agenda_prof(data))
+
+        elif(data["tipo"] == "inicia_serv"):
+            return json.dumps(agenda.inicia_serv(data))
+
+        elif(data["tipo"] == "para_serv"):
+            return json.dumps(agenda.para_serv(data))
+
+        elif(data["tipo"] == "conclui_serv"):
+            return json.dumps(agenda.conclui_serv(data))
+
 
 if __name__ == '__main__':
     app.run(

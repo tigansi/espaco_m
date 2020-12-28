@@ -122,7 +122,7 @@ export default {
                 loading.dismiss();
                 if (res.data.dados[0].tipo == "CLI") {
                   this.$router.push("HomePainelClientes/HomeClientes/Agendar");
-                }else{
+                } else {
                   this.$router.push("/EscolhaPapel");
                 }
               } else {
@@ -171,7 +171,7 @@ export default {
 }
 
 #img-logo {
-  width: 230px;
+  width: 210px;
 }
 
 #btn_entrar {

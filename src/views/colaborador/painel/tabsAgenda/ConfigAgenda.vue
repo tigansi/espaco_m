@@ -10,7 +10,7 @@
               <ion-card-content>
                 <ion-list>
                   <ion-list-header>
-                    <h1>Horários</h1>
+                    <h1>Serviço</h1>
                   </ion-list-header>
                   <div id="form">
                     <ion-item>
@@ -95,7 +95,7 @@
                   @click="efetuaCadastroAgenda"
                   id="btn_cad"
                   expand="block"
-                  >Cadastrar agenda</ion-button
+                  >Cadastrar horários</ion-button
                 >
               </ion-card-content>
             </ion-card>
@@ -103,7 +103,7 @@
               <ion-card-content>
                 <ion-list>
                   <ion-list-header>
-                    <h1>Sua agenda</h1>
+                    <h1>Seus horários</h1>
                   </ion-list-header>
                   <div v-for="hr_banco of hor_banco" :key="hr_banco.id_horario">
                     <ion-item>

@@ -20,7 +20,7 @@ class Agenda:
             # Depois, na tabela de horários, o horário deve ser alterado
             # para is_ativo = 'false'
 
-            sql = """INSERT 
+            sql = """INSERT
                         INTO agenda(id_horario,
                                     id_cliente)
                         VALUES(%s, %s)"""
@@ -29,9 +29,9 @@ class Agenda:
             curso.execute(sql, val)
             banco.commit()
 
-            sql = """UPDATE 
-                        horarios 
-                    SET 
+            sql = """UPDATE
+                        horarios
+                    SET
                         is_ativo = '0'
                     WHERE
                         id_horario = %s"""
@@ -41,6 +41,129 @@ class Agenda:
             banco.commit()
 
             resul = {"msg": "Horário agendado com sucesso", "sucesso": True}
+
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
+    def list_agenda_prof(self, data: list) -> {}:
+        """Método que Lista a agenda do profissional"""
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+
+            sql = """SELECT
+	                    agenda.id_agenda,
+	                    agenda.id_cliente,
+                        agenda.is_andamento,
+	                    usuarios.nm_usuario as nm_cliente,
+                        usuarios.foto,
+	                    to_char(horarios.data,
+		                    'dd/mm/YYYY HH24:MI') as data,
+	                    servicos.nm_servico
+                    FROM agenda
+                    JOIN usuarios
+                    ON agenda.id_cliente = usuarios.id_usuario AND
+                       agenda.is_ativo = '1'
+                    JOIN horarios
+                    ON agenda.id_horario = horarios.id_horario AND
+                       horarios.data >= current_timestamp AND
+                       horarios.id_usuario = %s
+                    JOIN servicos
+                    ON horarios.id_servico = servicos.id_servico"""
+
+            val = (data["id_col"], )
+            curso.execute(sql, val)
+            dad = curso.fetchall()
+
+            resul = {"msg": "Dados encontrados", "sucesso": True, "dados": dad}
+
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
+    def inicia_serv(self, data: list) -> {}:
+        """Método que dá inicio ao serviço"""
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+
+            sql = """UPDATE
+                        agenda
+                    SET
+                        is_andamento = '1'
+                    WHERE id_agenda = %s"""
+
+            val = (data["id_agenda"], )
+            curso.execute(sql, val)
+            banco.commit()
+
+            resul = {"msg": "Serviço iniciado", "sucesso": True}
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
+    def para_serv(self, data: list) -> {}:
+        """Método que para o serviço"""
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+
+            sql = """UPDATE 
+                        agenda 
+                    SET 
+                        is_andamento = '0' 
+                    WHERE id_agenda = %s"""
+
+            val = (data["id_agenda"], )
+            curso.execute(sql, val)
+            banco.commit()
+
+            resul = {"msg": "Serviço parado", "sucesso": True}
+
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
+    def conclui_serv(self, data: list()) -> {}:
+        """Método que conclui o servico"""
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+
+            sql = """UPDATE 
+                        agenda 
+                    SET 
+                        is_concluido = '1',
+                        is_andamento = '0',
+                        is_ativo = '0'
+                    WHERE id_agenda = %s"""
+
+            val = (data["id_agenda"], )
+            curso.execute(sql, val)
+            banco.commit()
+
+            resul = {"msg": "Serviço parado", "sucesso": True}
 
         except (Exception, psycopg2.Error) as error:
             resul = {"msg": str(error), "sucesso": False}

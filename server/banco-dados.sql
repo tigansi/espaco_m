@@ -43,6 +43,7 @@ create table agenda
 	id_horario 	 int unique,
 	id_cliente   int not null,
 	is_concluido boolean default false,
+	is_andamento boolean default false,
 	is_ativo     boolean default true,
 
 	foreign key(id_horario) references horarios (id_horario)
