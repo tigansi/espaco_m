@@ -176,6 +176,9 @@ def agenda():
         elif(data["tipo"] == "list_agenda_prof"):
             return json.dumps(agenda.list_agenda_prof(data))
 
+        elif(data["tipo"] == "list_agenda_cli"):
+            return json.dumps(agenda.list_agenda_cli(data))
+
         elif(data["tipo"] == "inicia_serv"):
             return json.dumps(agenda.inicia_serv(data))
 

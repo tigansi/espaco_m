@@ -183,7 +183,10 @@ export default {
               };
               Provider.provider("agenda", JSON.stringify(dados)).then((res) => {
                 if (res.data.sucesso) {
-                  this.alertaSucesso("Sucesso !!!", "Serviço concluido");
+                  this.alertaSucesso(
+                    "Sucesso !!!",
+                    "Serviço concluido com sucesso"
+                  );
                   this.listaAgendaProf();
                 }
               });

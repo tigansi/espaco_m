@@ -92,6 +92,45 @@ class Agenda:
         print(resul)
         return resul
 
+    def list_agenda_cli(self, data: list) -> {}:
+        """Método que Lista a agenda do cliente"""
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+
+            sql = """SELECT
+	                    agenda.id_agenda,
+	                    agenda.id_cliente,
+                        agenda.is_andamento,
+	                    usuarios.nm_usuario,
+                        usuarios.foto,
+	                    to_char(horarios.data,
+		                    'dd/mm/YYYY HH24:MI') as data,
+	                    servicos.nm_servico
+                    FROM agenda
+                        JOIN horarios
+                        ON agenda.id_horario = horarios.id_horario AND
+                           horarios.data >= current_timestamp 
+                        JOIN servicos
+                        ON horarios.id_servico = servicos.id_servico
+                        JOIN usuarios
+                        ON horarios.id_usuario = usuarios.id_usuario"""
+
+            val = (data["id_usuario"], )
+            curso.execute(sql, val)
+            dad = curso.fetchall()
+
+            resul = {"msg": "Dados encontrados", "sucesso": True, "dados": dad}
+
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
     def inicia_serv(self, data: list) -> {}:
         """Método que dá inicio ao serviço"""
         try:
