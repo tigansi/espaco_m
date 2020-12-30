@@ -26,7 +26,7 @@
         <ion-card-content>
           <ion-list>
             <ion-list-header>
-              <h1>Agenda do dia</h1>
+              <h1>Agendamentos</h1>
             </ion-list-header>
             <div v-for="age of agenda_cli" :key="age.id_agenda">
               <ion-item>
@@ -40,6 +40,14 @@
                   <p>{{ age.nm_servico }}</p>
                   <p>{{ age.data }}</p>
                 </ion-label>
+                <ion-button
+                  @click="
+                    alertaConfirmaDesistencia(age.id_agenda, age.id_horario)
+                  "
+                  color="warning"
+                  shape="round"
+                  >Desistir</ion-button
+                >
               </ion-item>
             </div>
           </ion-list>
@@ -50,6 +58,7 @@
 </template>
 
 <script>
+import { alertController } from "@ionic/core";
 import Provider from "@/services/provider";
 export default {
   data() {
@@ -61,6 +70,53 @@ export default {
     };
   },
   methods: {
+    async alertaConfirmaDesistencia(id_agenda, id_horario) {
+      const alert = await alertController.create({
+        cssClass: "my-custom-class",
+        header: "Atenção !",
+        message: "Deseja desistir do horário ?",
+        buttons: [
+          {
+            text: "Cancelar",
+            role: "cancel",
+            cssClass: "secondary",
+            handler: (blah) => {
+              console.log("Confirm Cancel:", blah);
+            },
+          },
+          {
+            text: "Confirmar",
+            handler: () => {
+              console.log("Confirm Okay");
+              let dados = {
+                tipo: "desiste_agenda",
+                id_horario: id_horario,
+                id_agenda: id_agenda,
+                id_cli: this.id_cliente,
+              };
+              Provider.provider("agenda", JSON.stringify(dados)).then((res) => {
+                if (res.data.sucesso) {
+                  this.agenda_cli = [];
+                  this.listaAgendaCliente();
+                  this.alertaSucesso("Sucesso !!!", res.data.msg);
+                }
+              });
+            },
+          },
+        ],
+      });
+      return alert.present();
+    },
+    async alertaSucesso(tipo, msg) {
+      const alert = await alertController.create({
+        cssClass: "my-custom-class",
+        header: tipo,
+        message: msg,
+        buttons: ["OK"],
+      });
+
+      await alert.present();
+    },
     listaAgendaCliente() {
       let dados = {
         tipo: "list_agenda_cli",

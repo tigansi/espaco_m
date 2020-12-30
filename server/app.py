@@ -161,6 +161,9 @@ def horarios():
         elif(data["tipo"] == "lista_serv_prof"):
             return json.dumps(hora.lista_serv_prof(data))
 
+        elif(data["tipo"] == "lista_prof_serv"):
+            return json.dumps(hora.lista_prof_serv(data))
+
         elif(data["tipo"] == "list_hor_serv_prof"):
             return json.dumps(hora.list_hor_serv_prof(data))
 
@@ -187,6 +190,9 @@ def agenda():
 
         elif(data["tipo"] == "conclui_serv"):
             return json.dumps(agenda.conclui_serv(data))
+
+        elif(data["tipo"] == "desiste_agenda"):
+            return json.dumps(agenda.desiste_agenda(data))
 
 
 if __name__ == '__main__':

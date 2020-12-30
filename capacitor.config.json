@@ -1,0 +1,13 @@
+{
+  "appId": "com.espaco_m.app",
+  "appName": "espaco_m",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}

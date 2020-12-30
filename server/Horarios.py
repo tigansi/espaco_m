@@ -252,8 +252,41 @@ class Horarios:
         print(resul)
         return resul
 
+    def lista_prof_serv(self, data: list) -> {}:
+        """Método que os profissionais de determinado serviço"""
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+
+            sql = """SELECT DISTINCT ON (usuarios.id_usuario)
+	                    usuarios.id_usuario as id_col,
+	                    usuarios.nm_usuario as nm_col,
+                        usuarios.foto
+                    FROM
+	                    usuarios
+                    JOIN horarios
+                    ON horarios.id_usuario = usuarios.id_usuario AND
+                       horarios.id_servico = %s AND
+                       horarios.data >= current_timestamp"""
+
+            val = (data["id_servico"], )
+            curso.execute(sql, val)
+            dad = curso.fetchall()
+
+            resul = {"msg": "Dados encontrados",
+                     "dados": dad, "sucesso": True}
+
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
     def list_hor_serv_prof(self, data: list):
-        """"""
+        """Método que lista os horários do colaborador"""
         try:
             banco = Banco()
             curso = banco.conectar()

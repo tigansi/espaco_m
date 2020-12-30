@@ -106,7 +106,8 @@ class Agenda:
                         usuarios.foto,
 	                    to_char(horarios.data,
 		                    'dd/mm/YYYY HH24:MI') as data,
-	                    servicos.nm_servico
+	                    servicos.nm_servico,
+                        horarios.id_horario
                     FROM agenda
                         JOIN horarios
                         ON agenda.id_horario = horarios.id_horario AND
@@ -203,6 +204,42 @@ class Agenda:
             banco.commit()
 
             resul = {"msg": "Serviço parado", "sucesso": True}
+
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
+    def desiste_agenda(self, data: list) -> {}:
+        """Método que apaga a agenda e horário selecionado"""
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+
+            # O registro deve ser excluido da tabela de agenda
+            # Depois marcar o horário como disponível na tabela
+
+            sql = """DELETE 
+                        FROM agenda 
+                    WHERE id_agenda = %s"""
+
+            val = (data["id_agenda"], )
+            curso.execute(sql, val)
+            banco.commit()
+
+            sql = """UPDATE horarios 
+                        SET is_ativo = '1'
+                    WHERE id_horario = %s"""
+
+            val = (data["id_horario"], )
+            curso.execute(sql, val)
+            banco.commit()
+
+            resul = {"msg": "Agenda excluida com sucesso", "sucesso": True}
 
         except (Exception, psycopg2.Error) as error:
             resul = {"msg": str(error), "sucesso": False}
