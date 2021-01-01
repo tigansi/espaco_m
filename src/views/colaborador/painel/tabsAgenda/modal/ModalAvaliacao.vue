@@ -12,7 +12,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content id="page">
-      <ion-card style="background-color:white">
+      <ion-card style="background-color: white">
         <ion-card-content>
           <ion-list id="form">
             <ion-list-header>
@@ -56,11 +56,12 @@ export default {
   components: {
     StarRating,
   },
-  props: ["id_agenda"],
+  props: ["id_cliente", "id_agenda"],
   data() {
     return {
       avaliacao: null,
       comentarios: "",
+      id_cli: this.id_cliente,
       id_agen: this.id_agenda,
     };
   },
@@ -74,7 +75,12 @@ export default {
       if (this.avaliacao == 0 || this.avaliacao == null) {
         this.presentToast("A avaliação deve ser maior que zero");
       } else {
-        //
+        let dados = {
+          tipo: "cad_aval",
+          id_agenda: this.id_agen,
+          id_cliente: this.id_cli,
+        };
+        dados;
       }
     },
     async presentToast(msg) {

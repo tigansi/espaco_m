@@ -4,7 +4,7 @@
       <ion-grid>
         <ion-row>
           <ion-col size="12">
-            <ion-card style="background-color:white">
+            <ion-card style="background-color: white">
               <ion-card-header>
                 <ion-grid>
                   <ion-row>
@@ -27,7 +27,7 @@
                 </ion-grid>
               </ion-card-header>
             </ion-card>
-            <ion-card style="background-color:white">
+            <ion-card style="background-color: white">
               <ion-card-content>
                 <ion-list>
                   <ion-list-header>
@@ -58,7 +58,9 @@
                           <ion-icon slot="icon-only" name="stop"></ion-icon>
                         </ion-button>
                         <ion-button
-                          @click="abreModalAvaliacao(age.id_cliente)"
+                          @click="
+                            abreModalAvaliacao(age.id_agenda, age.id_cliente)
+                          "
                           color="success"
                           id="btn_play"
                           shape="round"
@@ -106,12 +108,13 @@ export default {
     };
   },
   methods: {
-    async abreModalAvaliacao(id_cliente) {
+    async abreModalAvaliacao(id_agenda, id_cliente) {
       id_cliente;
       let modal = await this.$ionic.modalController.create({
         component: ModalAvaliacao,
         componentProps: {
           propsData: {
+            id_agenda: id_agenda,
             id_cliente: id_cliente,
           },
         },

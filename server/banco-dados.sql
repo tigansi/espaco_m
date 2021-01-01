@@ -48,3 +48,14 @@ create table agenda
 
 	foreign key(id_horario) references horarios (id_horario)
 );
+
+create table avaliacao
+(
+	id_avaliacao serial unique,
+	id_agenda    int,
+	id_avaliado  int not null,
+	id_avaliador int not null,
+	vl_avaliacao int default -1,
+	comentarios  text,
+	tp_avaliacao varchar(15) not null
+);

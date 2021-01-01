@@ -195,8 +195,16 @@ def agenda():
             return json.dumps(agenda.desiste_agenda(data))
 
 
+@app.route("/avaliacao", methods=["POST"])
+def avaliacao():
+    if(request.method == "POST"):
+        pass
+
+    return ""
+
+
 if __name__ == '__main__':
     app.run(
         debug=True,
-        host="192.168.8.7")
+        host="192.168.8.15")
     app.config['TEMPLATES_AUTORELOAD'] = True
