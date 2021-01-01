@@ -58,7 +58,7 @@
                           <ion-icon slot="icon-only" name="stop"></ion-icon>
                         </ion-button>
                         <ion-button
-                          @click="alertaConcluiServico(age.id_agenda)"
+                          @click="abreModalAvaliacao(age.id_cliente)"
                           color="success"
                           id="btn_play"
                           shape="round"
@@ -84,18 +84,6 @@
                 </ion-list>
               </ion-card-content>
             </ion-card>
-
-            <!--
-            <ion-card style="background-color:white">
-              <ion-card-content>
-                <ion-list>
-                  <ion-list-header>
-                    <h1>Agenda geral</h1>
-                  </ion-list-header>
-                </ion-list>
-              </ion-card-content>
-            </ion-card>
-            -->
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -106,6 +94,8 @@
 <script>
 import Provider from "@/services/provider";
 import { alertController } from "@ionic/core";
+import ModalAvaliacao from "./modal/ModalAvaliacao";
+
 export default {
   data() {
     return {
@@ -116,6 +106,18 @@ export default {
     };
   },
   methods: {
+    async abreModalAvaliacao(id_cliente) {
+      id_cliente;
+      let modal = await this.$ionic.modalController.create({
+        component: ModalAvaliacao,
+        componentProps: {
+          propsData: {
+            id_cliente: id_cliente,
+          },
+        },
+      });
+      modal.present();
+    },
     paraServico(id_agenda) {
       id_agenda;
       let dados = {
