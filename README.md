@@ -7,6 +7,7 @@
     * vue add router # com o history mode habilitado;
     * Rodar o npm install --save axios vue-axios;
     * Rodar o npm install v-mask;
+    * Rodar o npm i vue-star-rating;
 
 ## Configurações do Ionic
 * Para criar o projeto a primeira vez, é necessário seguir alguns passos, após criar o projeto Vue
@@ -48,6 +49,8 @@
 ## Input's VueJS e Ionic
 * Para usar os inputs do Ionic com o vue, é necessário consultar as informações no final da página abaixo:
     * https://programmer.help/blogs/v-model-and-ionic4-component-data-binding-failed.html
+* Para trabalhar com sistema de estrelas de avaliação é necessário seguir as instruções
+    * https://www.npmjs.com/package/vue-star-rating
 
 
 ## Project setup

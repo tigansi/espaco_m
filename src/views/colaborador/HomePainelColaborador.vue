@@ -12,7 +12,20 @@
 <script>
 import MenuColaborador from "@/components/MenuColaborador";
 import { addIcons } from "ionicons";
-import { exit, settings, calendar, person, trash,image, lockClosed, mail, call } from "ionicons/icons";
+import {
+  exit,
+  settings,
+  calendar,
+  person,
+  trash,
+  image,
+  lockClosed,
+  mail,
+  call,
+  checkmarkDoneCircle,
+  play,
+  stop
+} from "ionicons/icons";
 
 addIcons({
   "md-exit": exit,
@@ -25,14 +38,20 @@ addIcons({
   "ios-person": person,
   "md-trash": trash,
   "ios-trash": trash,
-  "md-image":image,
-  "ios-image":image,
-  "md-lock-closed":lockClosed,
-  "ios-lock-closed":lockClosed,
-  "md-mail":mail,
-  "ios-mail":mail,
-  "md-call":call,
-  "ios-call":call
+  "md-image": image,
+  "ios-image": image,
+  "md-lock-closed": lockClosed,
+  "ios-lock-closed": lockClosed,
+  "md-mail": mail,
+  "ios-mail": mail,
+  "md-call": call,
+  "ios-call": call,
+  "md-check-mark-done-circle": checkmarkDoneCircle,
+  "ios-check-mark-done-circle": checkmarkDoneCircle,
+  "md-play":play,
+  "ios-play":play,
+  "md-stop":stop,
+  "ios-stop":stop
 });
 
 export default {

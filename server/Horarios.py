@@ -65,15 +65,19 @@ class Horarios:
             PARAM_DATA = str("dd/mm/YYYY HH24:MI")
 
             sql = """SELECT 
-                        id_horario,
-                        id_servico, 
-                        id_usuario,
-                        to_char(data, %s) as data,
-                        is_ativo
+                        horarios.id_horario as id_horario,
+                        horarios.id_servico as id_servico, 
+                        horarios.id_usuario as id_usuario,
+                        to_char(horarios.data, %s) as data,
+                        horarios.is_ativo as is_ativo,
+                        servicos.nm_servico as nm_servico
                     FROM 
                         horarios
-                    WHERE
-                        id_usuario = %s"""
+                    INNER JOIN servicos ON
+                        horarios.id_servico = servicos.id_servico AND
+                        horarios.id_usuario = %s AND
+                        horarios.data >= current_timestamp
+                    ORDER BY horarios.data asc"""
 
             val = (PARAM_DATA, data["id_usuario"])
             curso.execute(sql, val)
@@ -82,7 +86,8 @@ class Horarios:
             if(len(dad) > 0):
                 resul = {"msg": "Há horários",
                          "sucesso": True, "dados": dad}
-                # Há horários
+            else:
+                resul = {"msg": "Não há horários disponíveis", "sucesso": False}
 
         except (Exception, psycopg2.Error) as error:
             resul = {"msg": str(error), "sucesso": False}
@@ -199,6 +204,134 @@ class Horarios:
             banco.commit()
 
             resul = {"msg": "Horário excluido com sucesso", "sucesso": True}
+
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
+    def lista_serv_prof(self, data: list) -> {}:
+        """
+        Método que lista os serivços em que o profissional tem
+        algum horário cadastrado
+        """
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+
+            sql = """SELECT 
+                        DISTINCT ON (servicos.id_servico)
+                        servicos.id_servico,
+                        servicos.valor,
+                        servicos.nm_servico
+                    FROM
+	                    servicos
+                    INNER JOIN 
+	                    horarios on 
+		                    servicos.id_servico = horarios.id_servico AND
+		                    horarios.id_usuario = %s AND
+                            data >= current_timestamp"""
+
+            val = (data["id_col"], )
+            curso.execute(sql, val)
+            dad = curso.fetchall()
+
+            resul = {"msg": "Serviço achados",
+                     "sucesso": True, "dados": dad}
+
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
+    def lista_prof_serv(self, data: list) -> {}:
+        """Método que os profissionais de determinado serviço"""
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+
+            sql = """SELECT DISTINCT ON (usuarios.id_usuario)
+	                    usuarios.id_usuario as id_col,
+	                    usuarios.nm_usuario as nm_col,
+                        usuarios.foto
+                    FROM
+	                    usuarios
+                    JOIN horarios
+                    ON horarios.id_usuario = usuarios.id_usuario AND
+                       horarios.id_servico = %s AND
+                       horarios.data >= current_timestamp"""
+
+            val = (data["id_servico"], )
+            curso.execute(sql, val)
+            dad = curso.fetchall()
+
+            resul = {"msg": "Dados encontrados",
+                     "dados": dad, "sucesso": True}
+
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
+    def list_hor_serv_prof(self, data: list):
+        """Método que lista os horários do colaborador"""
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+
+            print(data["dia"])
+
+            # Teste para ver se a data passa a hora de trava(18:00)
+            # Variável que armazena o agora para fazer a trava
+            hoje_str = datetime.datetime.now()
+            # Conversão da variável de trava
+            hoje_fmt = hoje_str.strftime("%Y-%m-%d %H:%M")
+            # Variável que armazena a data com o horário de fechamento
+            datf_string = str(data["dia"]) + " " + "18:00"
+            # Conversão da variável de horário de fechamento
+            datf_formtt = '%Y-%m-%d %H:%M'
+            # Variável que armazena a data no formato do Python
+            datf_fmtpyt = datetime.datetime.strptime(datf_string, datf_formtt)
+
+            # Verificado se o salão ainda está aberto
+            if(hoje_fmt <= datf_fmtpyt.strftime('%Y-%m-%d %H:%M')):
+                sql = """SELECT
+	                        horarios.id_horario,
+                            to_char(horarios.data, 'HH24:MI') as data
+                        FROM 
+                        	horarios
+                        WHERE 
+	                        horarios.id_usuario = %s AND
+                            horarios.id_servico = %s AND
+                            horarios.data::date = date %s AND
+                            horarios.is_ativo = '1'
+                        ORDER BY horarios.data asc"""
+
+                val = (data["id_usuario"], data["id_servico"], data["dia"])
+                curso.execute(sql, val)
+                dad = curso.fetchall()
+
+                if(len(dad) > 0):
+                    resul = {"msg": "Há horários disponíveis",
+                             "sucesso": True, "dados": dad}
+                else:
+                    resul = {"msg": "Não há horários disponíveis",
+                             "sucesso": False}
+            else:
+                resul = {"msg": "Não há horários disponíveis",
+                         "sucesso": False}
 
         except (Exception, psycopg2.Error) as error:
             resul = {"msg": str(error), "sucesso": False}

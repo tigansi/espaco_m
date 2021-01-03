@@ -29,7 +29,7 @@
             :to="{ name: 'ConfigAgenda' }"
           >
             <ion-icon name="settings"></ion-icon>
-            <ion-label>Configurar agenda</ion-label>
+            <ion-label>Configurar horários</ion-label>
           </ion-tab-button>
         </ion-tab-bar>
       </ion-tabs>

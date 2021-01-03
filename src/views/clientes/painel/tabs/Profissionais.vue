@@ -1,32 +1,68 @@
 <template>
   <ion-page>
     <ion-content id="page">
-      <ion-card style="background-color:white">
-        <ion-card-content>
-          <ion-list>
-            <ion-list-header>
-              <h1>Profissionais</h1>
-            </ion-list-header>
-            <div v-for="col of colaboradores" :key="col.id_usuario">
-              <ion-item>
-                <ion-avatar slot="start">
-                  <ion-img
-                    :src="'http://192.168.8.7:5000/fotos?caminho=' + col.foto"
-                  ></ion-img>
-                </ion-avatar>
-                <ion-label>
-                  <h3>{{ col.nm_usuario }}</h3>
-                  <p>Funcionário(a)</p>
-                </ion-label>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-card style="background-color:white;">
+              <ion-card-header>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size-md="9" size-sm>
+                      <ion-card-subtitle>Bem vindo(a)</ion-card-subtitle>
+                      <ion-card-title>{{ nome }} </ion-card-title>
+                    </ion-col>
+                    <ion-col>
+                      <center>
+                        <ion-avatar>
+                          <ion-img
+                            :src="
+                              'http://192.168.8.7:5000/fotos?caminho=' + foto
+                            "
+                          ></ion-img>
+                        </ion-avatar>
+                      </center>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-header>
+            </ion-card>
+            <ion-card style="background-color:white">
+              <ion-card-content>
+                <ion-list>
+                  <ion-list-header>
+                    <h1>Profissionais</h1>
+                  </ion-list-header>
+                  <div v-for="col of colaboradores" :key="col.id_usuario">
+                    <ion-item>
+                      <ion-avatar slot="start">
+                        <ion-img
+                          :src="
+                            'http://192.168.8.7:5000/fotos?caminho=' + col.foto
+                          "
+                        ></ion-img>
+                      </ion-avatar>
+                      <ion-label>
+                        <h3>{{ col.nm_usuario }}</h3>
+                        <p>Funcionário(a)</p>
+                      </ion-label>
 
-                <ion-buttons>
-                  <ion-button slot="end">Agendar</ion-button>
-                </ion-buttons>
-              </ion-item>
-            </div>
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
+                      <ion-button
+                        @click="
+                          mostraServicosProf(col.id_usuario, col.nm_usuario)
+                        "
+                        id="btn_agendar"
+                        slot="end"
+                        >Agendar</ion-button
+                      >
+                    </ion-item>
+                  </div>
+                </ion-list>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-content>
   </ion-page>
 </template>
@@ -34,13 +70,31 @@
 <script>
 import Provider from "@/services/provider.js";
 import { toastController } from "@ionic/core";
+import ModalServicos from "./modal/ModalServicos";
 export default {
   data() {
     return {
+      id_cliente: "",
       colaboradores: [],
+      nome: "",
+      foto: "",
     };
   },
   methods: {
+    async mostraServicosProf(id_colaborador, nm_colaborador) {
+      console.log(id_colaborador);
+
+      let modal = await this.$ionic.modalController.create({
+        component: ModalServicos,
+        componentProps: {
+          propsData: {
+            id_colaborador: id_colaborador,
+            nm_colaborador: nm_colaborador,
+          },
+        },
+      });
+      modal.present();
+    },
     listaColaboradores() {
       let dados = {
         tipo: "lista_colaboradores",
@@ -73,6 +127,10 @@ export default {
     },
   },
   mounted() {
+    var dados = JSON.parse(localStorage.getItem("isLogado"));
+    this.id_cliente = dados.id_usuario;
+    this.nome = dados.nm_usuario;
+    this.foto = dados.foto;
     this.listaColaboradores();
   },
 };
@@ -81,5 +139,11 @@ export default {
 <style>
 #page {
   --background: rgb(55, 52, 53);
+}
+
+#btn_agendar {
+  --background: rgb(60, 187, 178);
+  --background-activated: rgb(60, 187, 178);
+  --background-hover: rgb(60, 187, 178);
 }
 </style>

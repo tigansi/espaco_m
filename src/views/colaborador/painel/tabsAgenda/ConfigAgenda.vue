@@ -10,7 +10,7 @@
               <ion-card-content>
                 <ion-list>
                   <ion-list-header>
-                    <h1>Horários</h1>
+                    <h1>Serviço</h1>
                   </ion-list-header>
                   <div id="form">
                     <ion-item>
@@ -51,7 +51,7 @@
                 <ion-grid>
                   <ion-row>
                     <div v-for="hor of horarios" :key="hor">
-                      <ion-col size-md="2" size-sm="2">
+                      <ion-col size-md="2" size-sm="3">
                         <ion-button
                           style="width:125px"
                           shape="round"
@@ -95,7 +95,7 @@
                   @click="efetuaCadastroAgenda"
                   id="btn_cad"
                   expand="block"
-                  >Cadastrar agenda</ion-button
+                  >Cadastrar horários</ion-button
                 >
               </ion-card-content>
             </ion-card>
@@ -103,26 +103,39 @@
               <ion-card-content>
                 <ion-list>
                   <ion-list-header>
-                    <h1>Sua agenda</h1>
+                    <h1>Seus horários</h1>
                   </ion-list-header>
                   <div v-for="hr_banco of hor_banco" :key="hr_banco.id_horario">
                     <ion-item>
                       <ion-grid>
                         <ion-row>
-                          <ion-col size="9" size-md="10">{{
-                            hr_banco.data
-                          }}</ion-col>
+                          <ion-col size="9" size-md="10"
+                            >{{ hr_banco.data }}
+                            <br />
+                            <ion-card-subtitle>{{
+                              hr_banco.nm_servico
+                            }}</ion-card-subtitle>
+                          </ion-col>
                           <ion-col>
-                            <div v-show="hr_banco.is_ativo"></div>
-                            <ion-button
-                              @click="deletaHorario(hr_banco.id_horario)"
-                              color="danger"
-                            >
-                              <ion-icon
-                                slot="icon-only"
-                                name="trash"
-                              ></ion-icon>
-                            </ion-button>
+                            <div v-if="hr_banco.is_ativo">
+                              <ion-button
+                                @click="deletaHorario(hr_banco.id_horario)"
+                                color="danger"
+                              >
+                                <ion-icon
+                                  slot="icon-only"
+                                  name="trash"
+                                ></ion-icon>
+                              </ion-button>
+                            </div>
+                            <div v-else>
+                              <ion-button color="medium">
+                                <ion-icon
+                                  slot="icon-only"
+                                  name="check-mark-done-circle"
+                                ></ion-icon>
+                              </ion-button>
+                            </div>
                           </ion-col>
                         </ion-row>
                       </ion-grid>
@@ -226,7 +239,7 @@ export default {
             this.hor_banco = [];
             this.listaHorarios();
             this.presentToast(res.data.msg);
-          }else{
+          } else {
             this.presentToast(res.data.msg);
           }
         })
@@ -264,6 +277,8 @@ export default {
         .then((res) => {
           if (res.data.sucesso) {
             this.hor_banco = res.data.dados;
+          } else {
+            console.log(res.data.msg);
           }
         })
         .catch((error) => {

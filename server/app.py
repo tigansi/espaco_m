@@ -9,6 +9,8 @@ from werkzeug.utils import secure_filename
 from Usuarios import Usuarios
 from Servicos import Servicos
 from Horarios import Horarios
+from Agenda import Agenda
+from Avalicao import Avaliacao
 
 import os
 import json
@@ -156,6 +158,55 @@ def horarios():
 
         elif(data["tipo"] == "deleta_hor"):
             return json.dumps(hora.deleta_horarios(data))
+
+        elif(data["tipo"] == "lista_serv_prof"):
+            return json.dumps(hora.lista_serv_prof(data))
+
+        elif(data["tipo"] == "lista_prof_serv"):
+            return json.dumps(hora.lista_prof_serv(data))
+
+        elif(data["tipo"] == "list_hor_serv_prof"):
+            return json.dumps(hora.list_hor_serv_prof(data))
+
+
+@app.route("/agenda", methods=["POST"])
+def agenda():
+    if(request.method == "POST"):
+        data = json.loads(request.get_data())
+        agenda = Agenda()
+        if(data["tipo"] == "agenda_hor"):
+            return json.dumps(agenda.agenda_horario(data))
+
+        elif(data["tipo"] == "list_agenda_prof"):
+            return json.dumps(agenda.list_agenda_prof(data))
+
+        elif(data["tipo"] == "list_agenda_cli"):
+            return json.dumps(agenda.list_agenda_cli(data))
+
+        elif(data["tipo"] == "inicia_serv"):
+            return json.dumps(agenda.inicia_serv(data))
+
+        elif(data["tipo"] == "para_serv"):
+            return json.dumps(agenda.para_serv(data))
+
+        elif(data["tipo"] == "conclui_serv"):
+            return json.dumps(agenda.conclui_serv(data))
+
+        elif(data["tipo"] == "desiste_agenda"):
+            return json.dumps(agenda.desiste_agenda(data))
+
+
+@app.route("/avaliacao", methods=["POST"])
+def avaliacao():
+    if(request.method == "POST"):
+        data = json.loads(request.get_data())
+        avaliacao = Avaliacao()
+
+        if(data["tipo"] == "cad_aval"):
+            return json.dumps(avaliacao.cadastra_avaliacao(data))
+
+        elif(data["tipo"] == "aval_pend"):
+            return json.dumps(avaliacao.avaliacao_pendente(data))
 
 
 if __name__ == '__main__':

@@ -28,7 +28,7 @@
             :to="{ name: 'Agendar' }"
           >
             <ion-icon name="calendar"></ion-icon>
-            <ion-label>Agendar</ion-label>
+            <ion-label>Agendamentos</ion-label>
           </ion-tab-button>
 
           <ion-tab-button

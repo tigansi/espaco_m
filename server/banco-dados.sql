@@ -28,7 +28,6 @@ create table categorias
 	is_ativo     boolean default true
 );
 
-
 create table horarios
 (
 	id_horario 		serial unique,
@@ -37,3 +36,35 @@ create table horarios
 	data            timestamp default current_timestamp,
 	is_ativo 		boolean   default true
 );
+
+create table agenda
+(
+	id_agenda	 serial unique,
+	id_horario 	 int unique,
+	id_cliente   int not null,
+	is_concluido boolean default false,
+	is_andamento boolean default false,
+	is_ativo     boolean default true,
+
+	foreign key(id_horario) references horarios (id_horario)
+);
+
+create table avaliacao
+(
+	id_avaliacao 	 		serial unique,
+	id_agenda    	 		int,
+	id_avaliado  	 		int not null,
+	id_avaliador 	 		int not null,
+	vl_avaliacao_col 		int default 0,
+	vl_avaliacao_cli 		int default 0,
+	comentarios_cli  	    text,
+	comentarios_col  	    text,
+	is_avaliado_cliente 	boolean default 'false',
+	is_avaliado_colaborador boolean default 'false'
+);
+
+/*
+--select * from avaliacao;
+--6
+
+*/
