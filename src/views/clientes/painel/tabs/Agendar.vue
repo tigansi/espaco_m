@@ -5,27 +5,22 @@
         <ion-row>
           <ion-col size="12">
             <ion-card style="background-color: white">
-              <ion-card-header>
-                <ion-grid>
-                  <ion-row>
-                    <ion-col size-md="9" size-sm="9">
-                      <ion-card-subtitle>Bem vindo(a)</ion-card-subtitle>
-                      <ion-card-title>{{ nome }} </ion-card-title>
-                    </ion-col>
-                    <ion-col>
-                      <center>
-                        <ion-avatar slot="end">
-                          <ion-img
-                            :src="
-                              'http://192.168.8.7:5000/fotos?caminho=' + foto
-                            "
-                          ></ion-img>
-                        </ion-avatar>
-                      </center>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-              </ion-card-header>
+              <ion-card-content>
+                <ion-list>
+                  <ion-item>
+                    <ion-avatar slot="start">
+                      <ion-img
+                        :src="'http://192.168.8.7:5000/fotos?caminho=' + foto"
+                      ></ion-img>
+                    </ion-avatar>
+                    <ion-label>
+                      <h2>Bem vindo(a)</h2>
+                      <p>{{ nome }}</p>
+                      <p>Cliente</p>
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+              </ion-card-content>
             </ion-card>
             <ion-card style="background-color:white">
               <ion-card-content>

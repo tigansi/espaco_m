@@ -3,8 +3,6 @@
     <ion-content id="page">
       <ion-grid>
         <ion-row>
-          <!-- -->
-
           <ion-col size="12" size-md="6">
             <ion-card style="background-color:white">
               <ion-card-content>

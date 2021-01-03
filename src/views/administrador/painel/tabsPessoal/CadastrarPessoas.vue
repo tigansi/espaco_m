@@ -4,28 +4,23 @@
       <ion-grid>
         <ion-row>
           <ion-col>
-            <ion-card style="background-color:white">
-              <ion-card-header>
-                <ion-grid>
-                  <ion-row>
-                    <ion-col size-md="9" size-sm="9">
-                      <ion-card-subtitle>Bem vindo(a)</ion-card-subtitle>
-                      <ion-card-title>{{ nome_adm }} </ion-card-title>
-                    </ion-col>
-                    <ion-col>
-                      <center>
-                        <ion-avatar>
-                          <ion-img
-                            :src="
-                              'http://192.168.8.7:5000/fotos?caminho=' + foto
-                            "
-                          ></ion-img>
-                        </ion-avatar>
-                      </center>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-              </ion-card-header>
+            <ion-card style="background-color: white">
+              <ion-card-content>
+                <ion-list>
+                  <ion-item>
+                    <ion-avatar slot="start">
+                      <ion-img
+                        :src="'http://192.168.8.7:5000/fotos?caminho=' + foto"
+                      ></ion-img>
+                    </ion-avatar>
+                    <ion-label>
+                      <h2>Bem vindo(a)</h2>
+                      <p>{{ nome_adm }}</p>
+                      <p>Avaliação:</p>
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+              </ion-card-content>
             </ion-card>
 
             <ion-card style="background-color:white">
@@ -36,25 +31,18 @@
                   </ion-list-header>
                   <div v-for="col of colaboradores" :key="col.id_usuario">
                     <ion-item>
-                      <ion-grid>
-                        <ion-row>
-                          <ion-col size-md="9" size-sm="9">{{
-                            col.nm_usuario
-                          }}</ion-col>
-                          <ion-col>
-                            <center>
-                              <ion-avatar>
-                                <ion-img
-                                  :src="
-                                    'http://192.168.8.7:5000/fotos?caminho=' +
-                                      col.foto
-                                  "
-                                ></ion-img>
-                              </ion-avatar>
-                            </center>
-                          </ion-col>
-                        </ion-row>
-                      </ion-grid>
+                      <ion-avatar slot="start">
+                        <ion-img
+                          :src="
+                            'http://192.168.8.7:5000/fotos?caminho=' + col.foto
+                          "
+                        ></ion-img>
+                      </ion-avatar>
+                      <ion-label>
+                        <h2>{{ col.nm_usuario }}</h2>
+                        <p>Colaborador(a)</p>
+                        <p>Avaliação:</p>
+                      </ion-label>
                     </ion-item>
                   </div>
                 </ion-list>
