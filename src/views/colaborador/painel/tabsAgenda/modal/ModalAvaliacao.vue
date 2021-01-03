@@ -24,6 +24,7 @@
             <ion-item>
               <ion-label position="floating">Comentários</ion-label>
               <IonTextareaVue
+                v-model="comentarios"
                 rows="5"
                 cols="20"
                 placeholder="Escreva algum comentário..."
@@ -51,37 +52,61 @@
 
 <script>
 import StarRating from "vue-star-rating";
-import { toastController } from "@ionic/core";
+import { toastController, alertController } from "@ionic/core";
+import Provider from "@/services/provider";
 export default {
   components: {
     StarRating,
   },
-  props: ["id_cliente", "id_agenda"],
+  props: ["id_cliente", "id_agenda", "id_usuario"],
   data() {
     return {
       avaliacao: null,
       comentarios: "",
       id_cli: this.id_cliente,
       id_agen: this.id_agenda,
+      id_user: this.id_usuario,
     };
   },
   methods: {
     modalClose() {
       this.$ionic.modalController.dismiss();
     },
-    concluirSemAvaliacao() {},
+    concluirSemAvaliacao() {
+      this.presentToast("Avaliação não efetuada");
+      this.modalClose();
+    },
     concluirComAvaliacao() {
-      console.log(this.avaliacao);
+      console.log(this.id_agen);
       if (this.avaliacao == 0 || this.avaliacao == null) {
         this.presentToast("A avaliação deve ser maior que zero");
       } else {
         let dados = {
           tipo: "cad_aval",
           id_agenda: this.id_agen,
-          id_cliente: this.id_cli,
+          id_avaliador: this.id_user,
+          id_avaliado: this.id_cli,
+          comentarios: this.comentarios,
+          avaliacao: this.avaliacao,
+          tp: "COL_CLI",
         };
-        dados;
+        Provider.provider("avaliacao", JSON.stringify(dados)).then((res) => {
+          if (res.data.sucesso) {
+            this.alertaSucesso("Sucesso !!!", res.data.msg);
+            this.modalClose();
+          }
+        });
       }
+    },
+    async alertaSucesso(tipo, msg) {
+      const alert = await alertController.create({
+        cssClass: "my-custom-class",
+        header: tipo,
+        message: msg,
+        buttons: ["OK"],
+      });
+
+      await alert.present();
     },
     async presentToast(msg) {
       const toast = await toastController.create({

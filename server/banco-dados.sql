@@ -51,11 +51,20 @@ create table agenda
 
 create table avaliacao
 (
-	id_avaliacao serial unique,
-	id_agenda    int,
-	id_avaliado  int not null,
-	id_avaliador int not null,
-	vl_avaliacao int default -1,
-	comentarios  text,
-	tp_avaliacao varchar(15) not null
+	id_avaliacao 	 		serial unique,
+	id_agenda    	 		int,
+	id_avaliado  	 		int not null,
+	id_avaliador 	 		int not null,
+	vl_avaliacao_col 		int default 0,
+	vl_avaliacao_cli 		int default 0,
+	comentarios_cli  	    text,
+	comentarios_col  	    text,
+	is_avaliado_cliente 	boolean default 'false',
+	is_avaliado_colaborador boolean default 'false'
 );
+
+/*
+--select * from avaliacao;
+--6
+
+*/

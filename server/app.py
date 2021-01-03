@@ -10,6 +10,7 @@ from Usuarios import Usuarios
 from Servicos import Servicos
 from Horarios import Horarios
 from Agenda import Agenda
+from Avalicao import Avaliacao
 
 import os
 import json
@@ -198,13 +199,18 @@ def agenda():
 @app.route("/avaliacao", methods=["POST"])
 def avaliacao():
     if(request.method == "POST"):
-        pass
+        data = json.loads(request.get_data())
+        avaliacao = Avaliacao()
 
-    return ""
+        if(data["tipo"] == "cad_aval"):
+            return json.dumps(avaliacao.cadastra_avaliacao(data))
+
+        elif(data["tipo"] == "aval_pend"):
+            return json.dumps(avaliacao.avaliacao_pendente(data))
 
 
 if __name__ == '__main__':
     app.run(
         debug=True,
-        host="192.168.8.15")
+        host="192.168.8.7")
     app.config['TEMPLATES_AUTORELOAD'] = True

@@ -59,7 +59,7 @@
                         </ion-button>
                         <ion-button
                           @click="
-                            abreModalAvaliacao(age.id_agenda, age.id_cliente)
+                            alertaConcluiServico(age.id_agenda, age.id_cliente)
                           "
                           color="success"
                           id="btn_play"
@@ -116,6 +116,7 @@ export default {
           propsData: {
             id_agenda: id_agenda,
             id_cliente: id_cliente,
+            id_usuario: this.id_usuario,
           },
         },
       });
@@ -165,7 +166,7 @@ export default {
       });
       return alert.present();
     },
-    async alertaConcluiServico(id_agenda) {
+    async alertaConcluiServico(id_agenda, id_cliente) {
       const alert = await alertController.create({
         cssClass: "my-custom-class",
         header: "Atenção !",
@@ -188,10 +189,11 @@ export default {
               };
               Provider.provider("agenda", JSON.stringify(dados)).then((res) => {
                 if (res.data.sucesso) {
-                  this.alertaSucesso(
+                  /*this.alertaSucesso(
                     "Sucesso !!!",
                     "Serviço concluido com sucesso"
-                  );
+                  );*/
+                  this.abreModalAvaliacao(id_agenda, id_cliente);
                   this.listaAgendaProf();
                 }
               });

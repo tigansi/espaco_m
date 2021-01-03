@@ -111,7 +111,8 @@ class Agenda:
                     FROM agenda
                         JOIN horarios
                         ON agenda.id_horario = horarios.id_horario AND
-                           horarios.data >= current_timestamp 
+                           horarios.data >= current_timestamp AND
+                           agenda.is_concluido = '0'
                         JOIN servicos
                         ON horarios.id_servico = servicos.id_servico
                         JOIN usuarios
