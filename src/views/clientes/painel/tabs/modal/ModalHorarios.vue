@@ -41,11 +41,10 @@
           <ion-grid>
             <ion-row>
               <div v-for="hor of hor_banco" :key="hor.id_horario">
-                <ion-col size-md="2" size-sm="2">
+                <ion-col>
                   <ion-button
                     @click="alertaConfirmaHorario(hor.id_horario, hor.data)"
-                    style="width:125px"
-                    shape="round"
+                    style="width:73.213px; height:36px"
                     id="btn_hor"
                     >{{ hor.data }}</ion-button
                   >

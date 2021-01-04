@@ -13,30 +13,37 @@
     </ion-header>
     <ion-content id="page">
       <ion-card style="background-color:white">
+        <ion-card-header>
+          <ion-card-title class="ion-text-center">Profissionais</ion-card-title>
+        </ion-card-header>
         <ion-card-content>
           <ion-list>
-            <ion-list-header>
-              <h1>Profissionais</h1>
-            </ion-list-header>
-            <div v-for="col of colaboradores" :key="col.id_col">
-              <ion-item>
-                <ion-avatar slot="start">
-                  <ion-img
-                    :src="'http://192.168.8.7:5000/fotos?caminho=' + col.foto"
-                  ></ion-img>
-                </ion-avatar>
-                <ion-label>
-                  <h3>{{ col.nm_col }}</h3>
-                  <p>Funcionário(a)</p>
-                </ion-label>
+            <div v-if="tot_col > 0">
+              <div v-for="col of colaboradores" :key="col.id_col">
+                <ion-item>
+                  <ion-avatar slot="start">
+                    <ion-img
+                      :src="'http://192.168.8.7:5000/fotos?caminho=' + col.foto"
+                    ></ion-img>
+                  </ion-avatar>
+                  <ion-label>
+                    <h3>{{ col.nm_col }}</h3>
+                    <p>Funcionário(a)</p>
+                  </ion-label>
 
-                <ion-button
-                  @click="escolheProf(col.id_col, col.nm_col)"
-                  id="btn_agendar"
-                  slot="end"
-                  >Horários</ion-button
-                >
-              </ion-item>
+                  <ion-button
+                    @click="escolheProf(col.id_col, col.nm_col)"
+                    id="btn_agendar"
+                    slot="end"
+                    >Horários</ion-button
+                  >
+                </ion-item>
+              </div>
+            </div>
+            <div v-else>
+              <ion-card-subtitle class="ion-text-center">
+                Não há profissionais disponíveis
+              </ion-card-subtitle>
             </div>
           </ion-list>
         </ion-card-content>
@@ -56,6 +63,7 @@ export default {
       id_serv: this.id_servico,
       nm_serv: this.nm_servico,
       colaboradores: [],
+      tot_col: 0,
     };
   },
   methods: {
@@ -67,10 +75,10 @@ export default {
         tipo: "lista_prof_serv",
         id_servico: this.id_serv,
       };
-      dados;
       Provider.provider("horarios", JSON.stringify(dados)).then((res) => {
         if (res.data.sucesso) {
           this.colaboradores = res.data.dados;
+          this.tot_col = this.colaboradores.length;
         }
       });
     },
@@ -94,7 +102,7 @@ export default {
       }
     },
   },
-  mounted() {
+  created() {
     this.listaProfissionaisServico();
   },
 };

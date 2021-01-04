@@ -49,10 +49,9 @@
                 <ion-grid>
                   <ion-row>
                     <div v-for="hor of horarios" :key="hor">
-                      <ion-col size-md="2" size-sm="3">
+                      <ion-col>
                         <ion-button
-                          style="width:125px"
-                          shape="round"
+                          style="width:73.213px; height:36px"
                           id="btn_hor"
                           @click="escolheHorario(hor)"
                           >{{ hor }}</ion-button
@@ -80,7 +79,6 @@
                             <ion-button
                               @click="desisteHorario(hr_selec)"
                               color="warning"
-                              shape="round"
                               >Desistir</ion-button
                             >
                           </ion-col>

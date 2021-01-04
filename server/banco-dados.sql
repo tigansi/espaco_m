@@ -46,25 +46,34 @@ create table agenda
 	is_andamento boolean default false,
 	is_ativo     boolean default true,
 
-	foreign key(id_horario) references horarios (id_horario)
+	foreign key(id_horario) 
+		references horarios (id_horario)
 );
 
 create table avaliacao
 (
 	id_avaliacao 	 		serial unique,
 	id_agenda    	 		int,
-	id_avaliado  	 		int not null,
-	id_avaliador 	 		int not null,
+	id_colaborador  	 	int not null,
+	id_cliente   	 		int not null,
 	vl_avaliacao_col 		int default 0,
 	vl_avaliacao_cli 		int default 0,
-	comentarios_cli  	    text,
-	comentarios_col  	    text,
 	is_avaliado_cliente 	boolean default 'false',
 	is_avaliado_colaborador boolean default 'false'
 );
 
+create table comentarios
+(
+	id_comentario serial primary key,
+	id_avaliacao  int not null,
+	comentario    text,
+	foreign key(id_avaliacao) 
+		references avaliacao (id_avaliacao)
+);
+
+
 /*
 --select * from avaliacao;
 --6
-
+SELECT AVG(vl_avaliacao_col)::numeric(10,2) FROM avaliacao WHERE vl_avaliacao_col > 0;
 */

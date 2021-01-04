@@ -28,32 +28,41 @@
                   <ion-list-header>
                     <h1>Agendamentos</h1>
                   </ion-list-header>
-                  <div v-for="age of agenda_cli" :key="age.id_agenda">
-                    <ion-item>
-                      <ion-avatar slot="start">
-                        <ion-img
-                          :src="
-                            'http://192.168.8.7:5000/fotos?caminho=' + age.foto
+                  <div v-if="tot_age > 0">
+                    <div v-for="age of agenda_cli" :key="age.id_agenda">
+                      <ion-item>
+                        <ion-avatar slot="start">
+                          <ion-img
+                            :src="
+                              'http://192.168.8.7:5000/fotos?caminho=' +
+                                age.foto
+                            "
+                          ></ion-img>
+                        </ion-avatar>
+                        <ion-label>
+                          <h3>{{ age.nm_usuario }}</h3>
+                          <p>{{ age.nm_servico }}</p>
+                          <p>{{ age.data }}</p>
+                        </ion-label>
+                        <ion-button
+                          @click="
+                            alertaConfirmaDesistencia(
+                              age.id_agenda,
+                              age.id_horario
+                            )
                           "
-                        ></ion-img>
-                      </ion-avatar>
-                      <ion-label>
-                        <h3>{{ age.nm_usuario }}</h3>
-                        <p>{{ age.nm_servico }}</p>
-                        <p>{{ age.data }}</p>
-                      </ion-label>
-                      <ion-button
-                        @click="
-                          alertaConfirmaDesistencia(
-                            age.id_agenda,
-                            age.id_horario
-                          )
-                        "
-                        color="warning"
-                        shape="round"
-                        >Desistir</ion-button
-                      >
-                    </ion-item>
+                          color="warning"
+                          shape="round"
+                          >Desistir</ion-button
+                        >
+                      </ion-item>
+                    </div>
+                  </div>
+                  <div v-else>
+                    <br>
+                    <ion-card-subtitle class="ion-text-center"
+                      >Não há agendamentos</ion-card-subtitle
+                    >
                   </div>
                 </ion-list>
               </ion-card-content>
@@ -67,42 +76,47 @@
                   <ion-list-header>
                     <h1>Avaliações</h1>
                   </ion-list-header>
-                  <div v-for="aval of aval_pend" :key="aval.id_avaliador">
-                    <ion-item>
-                      <ion-label>
-                        <h3>{{ aval.nm_avaliado }}</h3>
-                        <p>Serviço: {{ aval.nm_servico }}</p>
-                        <p>Valor: {{ aval.valor }} R$</p>
-                        <p>Data: {{ aval.data }}</p>
-                        <star-rating
-                          v-bind:star-size="40"
-                          v-model="avaliacao"
-                        />
-                      </ion-label>
-                    </ion-item>
+                  <div
+                    v-for="(aval, index) in aval_pend"
+                    :key="aval.id_avaliacao"
+                  >
+                    <div v-if="index == aval_pend.length - 1">
+                      <ion-item>
+                        <ion-label>
+                          <h3>{{ aval.nm_avaliado }}</h3>
+                          <p>Serviço: {{ aval.nm_servico }}</p>
+                          <p>Valor: {{ aval.valor }} R$</p>
+                          <p>Data: {{ aval.data }}</p>
+                          <star-rating
+                            v-bind:star-size="40"
+                            v-model="avaliacao"
+                          />
+                        </ion-label>
+                      </ion-item>
 
-                    <ion-item>
-                      <ion-label position="floating">Comentários</ion-label>
-                      <IonTextareaVue
-                        v-model="comentarios"
-                        rows="3"
-                        cols="20"
-                        placeholder="Escreva algum comentário..."
-                      />
-                    </ion-item>
-                    <br />
-                    <ion-button
-                      @click="
-                        realizaAvaliacao(
-                          aval.id_agenda,
-                          aval.id_avaliado,
-                          aval.id_avaliacao
-                        )
-                      "
-                      color="success"
-                      expand="block"
-                      >Avaliar profissional</ion-button
-                    >
+                      <ion-item>
+                        <ion-label position="floating">Comentários</ion-label>
+                        <IonTextareaVue
+                          v-model="comentarios"
+                          rows="3"
+                          cols="20"
+                          placeholder="Escreva algum comentário..."
+                        />
+                      </ion-item>
+                      <br />
+                      <ion-button
+                        @click="
+                          realizaAvaliacao(
+                            aval.id_agenda,
+                            aval.id_cliente,
+                            aval.id_avaliacao
+                          )
+                        "
+                        color="success"
+                        expand="block"
+                        >Avaliar profissional</ion-button
+                      >
+                    </div>
                   </div>
                 </ion-list>
               </ion-card-content>
@@ -128,6 +142,7 @@ export default {
       id_usuario: "",
       foto: "",
       agenda_cli: [],
+      tot_age: 0,
       aval_pend: [],
       avaliacao: null,
       comentarios: "",
@@ -189,6 +204,7 @@ export default {
       Provider.provider("agenda", JSON.stringify(dados)).then((res) => {
         if (res.data.sucesso) {
           this.agenda_cli = res.data.dados;
+          this.tot_age = this.agenda_cli.length;
         }
       });
     },
@@ -205,6 +221,7 @@ export default {
       });
     },
     realizaAvaliacao(id_agenda, id_avaliado, id_avaliacao) {
+      //alert(id_avaliacao);
       if (this.avaliacao == 0 || this.avaliacao == null) {
         this.presentToast("A avaliação deve ser maior que zero");
       } else {
@@ -222,6 +239,7 @@ export default {
           if (res.data.sucesso) {
             this.alertaSucesso("Sucesso !!!", res.data.msg);
             this.aval_pend = [];
+            this.avaliacao = 0;
             this.verificaAvaliacaoPendente();
           }
         });

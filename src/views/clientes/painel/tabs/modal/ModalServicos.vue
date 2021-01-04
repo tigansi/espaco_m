@@ -22,30 +22,39 @@
 
       <ion-card style="background-color:white;">
         <ion-card-content>
-          <div v-for="serv of servicos" :key="serv.id_servico">
-            <ion-list>
-              <ion-item>
-                <ion-grid>
-                  <ion-row>
-                    <ion-col size="7" size-md="9">
-                      <ion-card-subtitle>{{
-                        serv.nm_servico
-                      }}</ion-card-subtitle>
-                      <ion-card-subtitle>R$ {{ serv.valor }}</ion-card-subtitle>
-                    </ion-col>
-                    <ion-col size="5" size-md="3">
-                      <ion-button
-                        @click="
-                          escolheServico(serv.id_servico, serv.nm_servico)
-                        "
-                        id="btn_escolha"
-                        >Escolher</ion-button
-                      >
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-              </ion-item>
-            </ion-list>
+          <div v-if="tot_serv > 0">
+            <div v-for="serv of servicos" :key="serv.id_servico">
+              <ion-list>
+                <ion-item>
+                  <ion-grid>
+                    <ion-row>
+                      <ion-col size="7" size-md="9">
+                        <ion-card-subtitle>{{
+                          serv.nm_servico
+                        }}</ion-card-subtitle>
+                        <ion-card-subtitle
+                          >R$ {{ serv.valor }}</ion-card-subtitle
+                        >
+                      </ion-col>
+                      <ion-col size="5" size-md="3">
+                        <ion-button
+                          @click="
+                            escolheServico(serv.id_servico, serv.nm_servico)
+                          "
+                          id="btn_escolha"
+                          >Escolher</ion-button
+                        >
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+              </ion-list>
+            </div>
+          </div>
+          <div v-else>
+            <ion-card-subtitle class="ion-text-center">
+              Não há serviços disponíveis
+            </ion-card-subtitle>
           </div>
         </ion-card-content>
       </ion-card>
@@ -64,6 +73,7 @@ export default {
       servicos: [],
       id_col: this.id_colaborador,
       nm_col: this.nm_colaborador,
+      tot_serv: 0,
     };
   },
   methods: {
@@ -79,6 +89,7 @@ export default {
         .then((res) => {
           if (res.data.sucesso) {
             this.servicos = res.data.dados;
+            this.tot_serv = this.servicos.length;
           } else {
             console.log(res.data.msg);
           }

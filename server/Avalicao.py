@@ -24,36 +24,60 @@ class Avaliacao:
                 sql = """INSERT
                             INTO avaliacao(
                                     id_agenda,
-                                    id_avaliado,
-                                    id_avaliador,
+                                    id_colaborador,
+                                    id_cliente,
                                     vl_avaliacao_cli,
-                                    comentarios_cli,
                                     is_avaliado_colaborador)
-                            VALUES(%s,%s, %s,%s, %s,%s)"""
+                            VALUES(%s,%s, %s,%s, %s) RETURNING id_avaliacao"""
 
                 val = (data["id_agenda"], data["id_avaliado"],
-                       data["id_avaliador"], data["avaliacao"],
-                       data["comentarios"], '1')
+                       data["id_avaliador"], data["avaliacao"], '1')
+
+                curso.execute(sql, val)
+                id_avaliacao = curso.fetchone()
+                banco.commit()
+
+                if(data["comentarios"] != ""):
+                    sql = """INSERT 
+                            INTO comentarios(id_avaliacao, comentario) 
+                        VALUES(%s, %s)"""
+
+                    val = (id_avaliacao["id_avaliacao"], data["comentarios"])
+
+                    curso.execute(sql, val)
+                    banco.commit()
 
             elif(data["tp"] == "CLI_COL"):
+                print("CLI_COL")
+
+                print(str(data["id_avaliacao"]))
                 # Cliente avalia colaborador e serviço
-                # Nesse caso, ao invés de ser um insert,
-                # deve ser feito um Update
 
                 sql = """UPDATE 
                             avaliacao 
                         SET 
                             vl_avaliacao_col = %s,
-                            is_avaliado_cliente = '1',
-                            comentarios_col = %s
+                            is_avaliado_cliente = '1'
                         WHERE
                             id_avaliacao = %s"""
 
-                val = (data["avaliacao"],  data["comentarios"],
-                       data["id_avaliacao"])
+                id_avaliacao = data["id_avaliacao"]
 
-            curso.execute(sql, val)
-            banco.commit()
+                print(str(id_avaliacao))
+                val = (data["avaliacao"], id_avaliacao)
+
+                curso.execute(sql, val)
+                banco.commit()
+
+                if(data["comentarios"] != ""):
+                    sql = """INSERT 
+                            INTO comentarios(id_avaliacao, comentario) 
+                        VALUES(%s, %s)"""
+
+                    val = (id_avaliacao, data["comentarios"])
+
+                    curso.execute(sql, val)
+                    banco.commit()
 
             resul = {"msg": "Avaliação cadastrada com sucesso",
                      "sucesso": True}
@@ -75,7 +99,7 @@ class Avaliacao:
 
             sql = """SELECT
                         avaliacao.id_avaliacao,
-	                    avaliacao.id_avaliado as id_avaliador,
+	                    avaliacao.id_colaborador as id_avaliador,
 	                    avaliacao.vl_avaliacao_cli avaliacao_avaliador,
 	                    usuarios.id_usuario as id_avaliado,
 	                    usuarios.nm_usuario as nm_avaliado,
@@ -87,13 +111,13 @@ class Avaliacao:
                         FROM
                         	avaliacao
                         JOIN usuarios
-                        ON usuarios.id_usuario = avaliacao.id_avaliador
+                        ON usuarios.id_usuario = avaliacao.id_cliente
                         JOIN agenda
                         ON agenda.id_agenda = avaliacao.id_agenda AND
                            agenda.is_concluido = '1' AND
                            avaliacao.is_avaliado_cliente = '0' AND
                            avaliacao.is_avaliado_colaborador = '1' AND
-                           avaliacao.id_avaliado = %s
+                           avaliacao.id_colaborador = %s
                         JOIN horarios
                         ON horarios.id_horario = agenda.id_horario
                         JOIN servicos
@@ -102,6 +126,7 @@ class Avaliacao:
             val = (data["id_avaliador"], )
             curso.execute(sql, val)
             dad = curso.fetchall()
+
             if(len(dad) > 0):
                 # Há avaliações pendentes
                 resul = {"msg": "Há avaliações pendentes",
@@ -110,6 +135,29 @@ class Avaliacao:
                 # Não há
                 resul = {"msg": "Não há avaliações pendentes",
                          "sucesso": False}
+
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
+    def avaliacao_profissional(self, data: list) -> {}:
+        """Método que consulta a nota do profissional pelo seu id"""
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+
+            sql = """SELECT 
+                        AVG(vl_avaliacao_col)::numeric(10,2) 
+                    FROM 
+                        avaliacao 
+                    WHERE
+                        id_ 
+                        vl_avaliacao_col > 0"""
 
         except (Exception, psycopg2.Error) as error:
             resul = {"msg": str(error), "sucesso": False}

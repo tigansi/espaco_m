@@ -28,55 +28,67 @@
                   <ion-list-header>
                     <h1>Agenda do dia</h1>
                   </ion-list-header>
-                  <div v-for="age of agenda_dia" :key="age.id_agenda">
-                    <ion-item>
-                      <ion-avatar slot="start">
-                        <ion-img
-                          :src="
-                            'http://192.168.8.7:5000/fotos?caminho=' + age.foto
-                          "
-                        ></ion-img>
-                      </ion-avatar>
-                      <ion-label>
-                        <h3>{{ age.nm_cliente }}</h3>
-                        <p>{{ age.nm_servico }}</p>
-                        <p>{{ age.data }}</p>
-                      </ion-label>
+                  <div v-if="tot_agen_dia > 0">
+                    <div v-for="age of agenda_dia" :key="age.id_agenda">
+                      <ion-item>
+                        <ion-avatar slot="start">
+                          <ion-img
+                            :src="
+                              'http://192.168.8.7:5000/fotos?caminho=' +
+                                age.foto
+                            "
+                          ></ion-img>
+                        </ion-avatar>
+                        <ion-label>
+                          <h3>{{ age.nm_cliente }}</h3>
+                          <p>{{ age.nm_servico }}</p>
+                          <p>{{ age.data }}</p>
+                        </ion-label>
 
-                      <div v-if="age.is_andamento">
-                        <ion-button
-                          @click="paraServico(age.id_agenda)"
-                          color="warning"
-                          id="btn_play"
-                          shape="round"
-                        >
-                          <ion-icon slot="icon-only" name="stop"></ion-icon>
-                        </ion-button>
-                        <ion-button
-                          @click="
-                            alertaConcluiServico(age.id_agenda, age.id_cliente)
-                          "
-                          color="success"
-                          id="btn_play"
-                          shape="round"
-                        >
-                          <ion-icon
-                            slot="icon-only"
-                            name="check-mark-done-circle"
-                          ></ion-icon>
-                        </ion-button>
-                      </div>
-                      <div v-else>
-                        <ion-button
-                          @click="alertaIniciaServico(age.id_agenda)"
-                          color="success"
-                          id="btn_play"
-                          shape="round"
-                        >
-                          <ion-icon slot="icon-only" name="play"></ion-icon>
-                        </ion-button>
-                      </div>
-                    </ion-item>
+                        <div v-if="age.is_andamento">
+                          <ion-button
+                            @click="paraServico(age.id_agenda)"
+                            color="warning"
+                            id="btn_play"
+                            shape="round"
+                          >
+                            <ion-icon slot="icon-only" name="stop"></ion-icon>
+                          </ion-button>
+                          <ion-button
+                            @click="
+                              alertaConcluiServico(
+                                age.id_agenda,
+                                age.id_cliente
+                              )
+                            "
+                            color="success"
+                            id="btn_play"
+                            shape="round"
+                          >
+                            <ion-icon
+                              slot="icon-only"
+                              name="check-mark-done-circle"
+                            ></ion-icon>
+                          </ion-button>
+                        </div>
+                        <div v-else>
+                          <ion-button
+                            @click="alertaIniciaServico(age.id_agenda)"
+                            color="success"
+                            id="btn_play"
+                            shape="round"
+                          >
+                            <ion-icon slot="icon-only" name="play"></ion-icon>
+                          </ion-button>
+                        </div>
+                      </ion-item>
+                    </div>
+                  </div>
+                  <div v-else>
+                    <br />
+                    <ion-card-subtitle class="ion-text-center"
+                      >Não há agendamentos</ion-card-subtitle
+                    >
                   </div>
                 </ion-list>
               </ion-card-content>
@@ -100,6 +112,8 @@ export default {
       foto: "",
       id_usuario: "",
       agenda_dia: [],
+      tot_agen_dia: 0,
+      avaliacao_prof: null,
     };
   },
   methods: {
@@ -217,11 +231,23 @@ export default {
         .then((res) => {
           if (res.data.sucesso) {
             this.agenda_dia = res.data.dados;
+            this.tot_agen_dia = this.agenda_dia.length;
           }
         })
         .catch((error) => {
           console.log("TIMEOUT " + error);
         });
+    },
+    buscaAvaliacao() {
+      let dados = {
+        tipo: "aval_prof",
+        id_prof: this.id_usuario,
+      };
+      Provider.provider("avaliacao", JSON.stringify(dados)).then((res) => {
+        if (res.data.sucesso) {
+          this.avaliacao_prof = res.data.dados;
+        }
+      });
     },
   },
   mounted() {

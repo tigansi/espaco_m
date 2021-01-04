@@ -208,6 +208,9 @@ def avaliacao():
         elif(data["tipo"] == "aval_pend"):
             return json.dumps(avaliacao.avaliacao_pendente(data))
 
+        elif(data["tipo"] == "aval_prof"):
+            return json.dumps(avaliacao.avaliacao_profissional(data))
+
 
 if __name__ == '__main__':
     app.run(
