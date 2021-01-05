@@ -24,7 +24,8 @@ import {
   call,
   checkmarkDoneCircle,
   play,
-  stop
+  stop,
+  chevronDownCircleOutline,
 } from "ionicons/icons";
 
 addIcons({
@@ -48,10 +49,11 @@ addIcons({
   "ios-call": call,
   "md-check-mark-done-circle": checkmarkDoneCircle,
   "ios-check-mark-done-circle": checkmarkDoneCircle,
-  "md-play":play,
-  "ios-play":play,
-  "md-stop":stop,
-  "ios-stop":stop
+  "md-play": play,
+  "ios-play": play,
+  "md-stop": stop,
+  "ios-stop": stop,
+  "md-chevron-down-circle-outline": chevronDownCircleOutline,
 });
 
 export default {

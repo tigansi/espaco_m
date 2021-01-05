@@ -59,7 +59,7 @@
                     </div>
                   </div>
                   <div v-else>
-                    <br>
+                    <br />
                     <ion-card-subtitle class="ion-text-center"
                       >Não há agendamentos</ion-card-subtitle
                     >
@@ -67,10 +67,7 @@
                 </ion-list>
               </ion-card-content>
             </ion-card>
-            <ion-card
-              v-if="aval_pend.length > 0"
-              style="background-color:white"
-            >
+            <ion-card v-if="tot_aval_pend > 0" style="background-color:white">
               <ion-card-content>
                 <ion-list id="form">
                   <ion-list-header>
@@ -144,6 +141,7 @@ export default {
       agenda_cli: [],
       tot_age: 0,
       aval_pend: [],
+      tot_aval_pend: 0,
       avaliacao: null,
       comentarios: "",
     };
@@ -217,6 +215,7 @@ export default {
       Provider.provider("avaliacao", JSON.stringify(dados)).then((res) => {
         if (res.data.sucesso) {
           this.aval_pend = res.data.dados;
+          this.tot_aval_pend = this.aval_pend.length;
         }
       });
     },

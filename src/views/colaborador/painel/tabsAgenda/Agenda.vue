@@ -1,6 +1,12 @@
 <template>
   <ion-page>
     <ion-content id="page">
+      <ion-refresher mode="md" slot="fixed" @ionRefresh="doRefresh($event)">
+        <ion-refresher-content
+          :pulling-icon="chevronDownCircleOutline"
+          refreshing-text="Buscando informações..."
+        ></ion-refresher-content>
+      </ion-refresher>
       <ion-grid>
         <ion-row>
           <ion-col size="12">
@@ -16,7 +22,12 @@
                     <ion-label>
                       <h2>Bem vindo(a)</h2>
                       <p>{{ nome_col }}</p>
-                      <p>Avaliação:</p>
+                      <p>
+                        <star-rating
+                          v-bind:star-size="15"
+                          v-model="avaliacao_prof"
+                        />
+                      </p>
                     </ion-label>
                   </ion-item>
                 </ion-list>
@@ -104,8 +115,12 @@
 import Provider from "@/services/provider";
 import { alertController } from "@ionic/core";
 import ModalAvaliacao from "./modal/ModalAvaliacao";
+import StarRating from "vue-star-rating";
 
 export default {
+  components: {
+    StarRating,
+  },
   data() {
     return {
       nome_col: "",
@@ -239,15 +254,30 @@ export default {
         });
     },
     buscaAvaliacao() {
+      console.log(this.id_usuario);
       let dados = {
         tipo: "aval_prof",
-        id_prof: this.id_usuario,
+        id_col: this.id_usuario,
       };
       Provider.provider("avaliacao", JSON.stringify(dados)).then((res) => {
         if (res.data.sucesso) {
-          this.avaliacao_prof = res.data.dados;
+          console.log(res.data.dados);
+          this.avaliacao_prof = res.data.dados[0].nota;
         }
       });
+    },
+    async doRefresh(event) {
+      this.listaAgendaProf();
+      this.buscaAvaliacao();
+
+      var dados = JSON.parse(localStorage.getItem("isLogado"));
+      this.nome_col = dados.nm_usuario;
+      this.foto = dados.foto;
+      this.id_usuario = dados.id_usuario;
+      setTimeout(() => {
+        console.log("Async operation has ended");
+        event.target.complete();
+      }, 2000);
     },
   },
   mounted() {
@@ -256,6 +286,7 @@ export default {
     this.foto = dados.foto;
     this.id_usuario = dados.id_usuario;
     this.listaAgendaProf();
+    this.buscaAvaliacao();
   },
 };
 </script>

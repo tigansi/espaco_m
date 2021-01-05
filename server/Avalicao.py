@@ -30,8 +30,8 @@ class Avaliacao:
                                     is_avaliado_colaborador)
                             VALUES(%s,%s, %s,%s, %s) RETURNING id_avaliacao"""
 
-                val = (data["id_agenda"], data["id_avaliado"],
-                       data["id_avaliador"], data["avaliacao"], '1')
+                val = (data["id_agenda"], data["id_avaliador"],
+                       data["id_avaliado"], data["avaliacao"], '1')
 
                 curso.execute(sql, val)
                 id_avaliacao = curso.fetchone()
@@ -117,7 +117,7 @@ class Avaliacao:
                            agenda.is_concluido = '1' AND
                            avaliacao.is_avaliado_cliente = '0' AND
                            avaliacao.is_avaliado_colaborador = '1' AND
-                           avaliacao.id_colaborador = %s
+                           avaliacao.id_cliente = %s
                         JOIN horarios
                         ON horarios.id_horario = agenda.id_horario
                         JOIN servicos
@@ -152,12 +152,19 @@ class Avaliacao:
             curso = banco.conectar()
 
             sql = """SELECT 
-                        AVG(vl_avaliacao_col)::numeric(10,2) 
+                        to_char(AVG(vl_avaliacao_col)::real, '9.9') as nota
                     FROM 
                         avaliacao 
                     WHERE
-                        id_ 
+                        id_colaborador = %s AND 
                         vl_avaliacao_col > 0"""
+
+            val = (data["id_col"], )
+            curso.execute(sql, val)
+            dad = curso.fetchall()
+
+            resul = {"msg": "Avaliação encontrada",
+                     "dados": dad, "sucesso": True}
 
         except (Exception, psycopg2.Error) as error:
             resul = {"msg": str(error), "sucesso": False}
