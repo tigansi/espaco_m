@@ -29,6 +29,14 @@
                   <ion-label>
                     <h3>{{ col.nm_col }}</h3>
                     <p>Funcionário(a)</p>
+                    <p>
+                      <star-rating
+                        :show-rating="false"
+                        read-only="true"
+                        v-bind:star-size="15"
+                        :rating="col.nota"
+                      />
+                    </p>
                   </ion-label>
 
                   <ion-button
@@ -55,8 +63,12 @@
 <script>
 import Provider from "@/services/provider";
 import ModalHorarios from "./ModalHorarios";
+import StarRating from "vue-star-rating";
 
 export default {
+  components: {
+    StarRating,
+  },
   props: ["id_servico", "nm_servico"],
   data() {
     return {

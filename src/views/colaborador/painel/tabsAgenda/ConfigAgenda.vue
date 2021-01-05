@@ -39,7 +39,7 @@
                 >
               </ion-card-content>
             </ion-card>
-            <ion-card style="background-color:white;">
+            <ion-card v-if="tot_horarios > 0" style="background-color:white;">
               <ion-card-content>
                 <ion-list>
                   <ion-list-header>
@@ -64,7 +64,7 @@
             </ion-card>
           </ion-col>
           <ion-col size="12" size-md="6">
-            <ion-card style="background-color:white">
+            <ion-card v-if="tot_hor_selec > 0" style="background-color:white">
               <ion-card-content>
                 <ion-list>
                   <ion-list-header>
@@ -158,7 +158,9 @@ export default {
       foto: "",
       servicos: [],
       horarios: [],
+      tot_horarios:0,
       hor_selecionados: [],
+      tot_hor_selec:0,
       hor_banco: [],
       form: {
         data: "",
@@ -194,6 +196,7 @@ export default {
               if (res.data.sucesso) {
                 console.log(res.data.dados);
                 this.horarios = res.data.dados;
+                this.tot_horarios = this.horarios.length;
                 loading.dismiss();
                 this.presentToast(res.data.msg);
               } else {
@@ -215,12 +218,14 @@ export default {
       }
 
       this.hor_selecionados.push(hor);
+      this.tot_hor_selec = this.hor_selecionados.length;
     },
     desisteHorario(hor) {
       var index = this.hor_selecionados.indexOf(hor);
       if (index > -1) {
         this.hor_selecionados.splice(index, 1);
       }
+      this.tot_hor_selec = this.hor_selecionados.length;
       this.buscaGrade();
     },
     deletaHorario(id_hor) {
@@ -256,6 +261,8 @@ export default {
           if (res.data.sucesso) {
             this.horarios = [];
             this.hor_selecionados = [];
+            this.tot_hor_selec = 0;
+            this.tot_horarios = 0;
             this.listaHorarios();
             this.presentToast(res.data.msg);
           }

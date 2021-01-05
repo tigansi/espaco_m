@@ -239,13 +239,24 @@ class Usuarios:
             condi = (" and ".join(where))
 
             sql = """SELECT
-                        id_usuario,
-                        nm_usuario,
-                        email,
-                        foto,
-                        tipo
+                        usuarios.id_usuario,
+                        usuarios.nm_usuario,
+                        usuarios.email,
+                        usuarios.foto,
+                        usuarios.tipo,
+	                    to_char(AVG(avaliacao.vl_avaliacao_col)::real, '9.9') 
+                            as nota
                     FROM
-                        usuarios WHERE """ + str(condi)
+                        usuarios 
+                    
+                    JOIN 
+                        avaliacao 
+                    ON 
+                        usuarios.id_usuario = avaliacao.id_colaborador
+                    WHERE """ + str(condi) + """ 
+                    GROUP BY
+	                    usuarios.id_usuario """
+
 
             curso.execute(sql)
             dad = curso.fetchall()

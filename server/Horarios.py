@@ -261,13 +261,18 @@ class Horarios:
             sql = """SELECT DISTINCT ON (usuarios.id_usuario)
 	                    usuarios.id_usuario as id_col,
 	                    usuarios.nm_usuario as nm_col,
-                        usuarios.foto
+                        usuarios.foto,
+                        to_char(AVG(avaliacao.vl_avaliacao_col)::real, '9.9') 
+                            as nota
                     FROM
 	                    usuarios
                     JOIN horarios
                     ON horarios.id_usuario = usuarios.id_usuario AND
                        horarios.id_servico = %s AND
-                       horarios.data >= current_timestamp"""
+                       horarios.data >= current_timestamp
+                    JOIN avaliacao
+					ON usuarios.id_usuario = avaliacao.id_colaborador
+					GROUP BY usuarios.id_usuario"""
 
             val = (data["id_servico"], )
             curso.execute(sql, val)

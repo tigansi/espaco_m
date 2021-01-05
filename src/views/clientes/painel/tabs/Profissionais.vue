@@ -39,6 +39,14 @@
                       </ion-avatar>
                       <ion-label>
                         <h3>{{ col.nm_usuario }}</h3>
+                        <p>
+                          <star-rating
+                            :show-rating="false"
+                            read-only="true"
+                            v-bind:star-size="15"
+                            :rating="col.nota"
+                          />
+                        </p>
                         <p>Funcionário(a)</p>
                       </ion-label>
 
@@ -66,7 +74,12 @@
 import Provider from "@/services/provider.js";
 import { toastController } from "@ionic/core";
 import ModalServicos from "./modal/ModalServicos";
+import StarRating from "vue-star-rating";
+
 export default {
+  components: {
+    StarRating,
+  },
   data() {
     return {
       id_cliente: "",

@@ -1,6 +1,12 @@
 <template>
   <ion-page>
     <ion-content id="page">
+      <ion-refresher mode="md" slot="fixed" @ionRefresh="doRefresh($event)">
+        <ion-refresher-content
+          :pulling-icon="chevronDownCircleOutline"
+          refreshing-text="Buscando informações..."
+        ></ion-refresher-content>
+      </ion-refresher>
       <ion-grid>
         <ion-row>
           <ion-col size="12">
@@ -67,57 +73,6 @@
                 </ion-list>
               </ion-card-content>
             </ion-card>
-            <ion-card v-if="tot_aval_pend > 0" style="background-color:white">
-              <ion-card-content>
-                <ion-list id="form">
-                  <ion-list-header>
-                    <h1>Avaliações</h1>
-                  </ion-list-header>
-                  <div
-                    v-for="(aval, index) in aval_pend"
-                    :key="aval.id_avaliacao"
-                  >
-                    <div v-if="index == aval_pend.length - 1">
-                      <ion-item>
-                        <ion-label>
-                          <h3>{{ aval.nm_avaliado }}</h3>
-                          <p>Serviço: {{ aval.nm_servico }}</p>
-                          <p>Valor: {{ aval.valor }} R$</p>
-                          <p>Data: {{ aval.data }}</p>
-                          <star-rating
-                            v-bind:star-size="40"
-                            v-model="avaliacao"
-                          />
-                        </ion-label>
-                      </ion-item>
-
-                      <ion-item>
-                        <ion-label position="floating">Comentários</ion-label>
-                        <IonTextareaVue
-                          v-model="comentarios"
-                          rows="3"
-                          cols="20"
-                          placeholder="Escreva algum comentário..."
-                        />
-                      </ion-item>
-                      <br />
-                      <ion-button
-                        @click="
-                          realizaAvaliacao(
-                            aval.id_agenda,
-                            aval.id_cliente,
-                            aval.id_avaliacao
-                          )
-                        "
-                        color="success"
-                        expand="block"
-                        >Avaliar profissional</ion-button
-                      >
-                    </div>
-                  </div>
-                </ion-list>
-              </ion-card-content>
-            </ion-card>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -128,11 +83,9 @@
 <script>
 import { alertController, toastController } from "@ionic/core";
 import Provider from "@/services/provider";
-import StarRating from "vue-star-rating";
+import ModalAvalPend from "./modal/ModalAvalPend";
+
 export default {
-  components: {
-    StarRating,
-  },
   data() {
     return {
       nome: "",
@@ -140,10 +93,6 @@ export default {
       foto: "",
       agenda_cli: [],
       tot_age: 0,
-      aval_pend: [],
-      tot_aval_pend: 0,
-      avaliacao: null,
-      comentarios: "",
     };
   },
   methods: {
@@ -206,7 +155,7 @@ export default {
         }
       });
     },
-    verificaAvaliacaoPendente() {
+    async verificaAvaliacaoPendente() {
       let dados = {
         tipo: "aval_pend",
         tp: "CLI_COL",
@@ -214,35 +163,11 @@ export default {
       };
       Provider.provider("avaliacao", JSON.stringify(dados)).then((res) => {
         if (res.data.sucesso) {
-          this.aval_pend = res.data.dados;
-          this.tot_aval_pend = this.aval_pend.length;
+          this.abreModalAvalPend(res.data.dados);
+        } else {
+          console.log(res.data.msg);
         }
       });
-    },
-    realizaAvaliacao(id_agenda, id_avaliado, id_avaliacao) {
-      //alert(id_avaliacao);
-      if (this.avaliacao == 0 || this.avaliacao == null) {
-        this.presentToast("A avaliação deve ser maior que zero");
-      } else {
-        let dados = {
-          tipo: "cad_aval",
-          id_avaliacao: id_avaliacao,
-          id_agenda: id_agenda,
-          id_avaliador: this.id_usuario,
-          id_avaliado: id_avaliado,
-          comentarios: this.comentarios,
-          avaliacao: this.avaliacao,
-          tp: "CLI_COL",
-        };
-        Provider.provider("avaliacao", JSON.stringify(dados)).then((res) => {
-          if (res.data.sucesso) {
-            this.alertaSucesso("Sucesso !!!", res.data.msg);
-            this.aval_pend = [];
-            this.avaliacao = 0;
-            this.verificaAvaliacaoPendente();
-          }
-        });
-      }
     },
     async presentToast(msg) {
       const toast = await toastController.create({
@@ -254,12 +179,34 @@ export default {
       });
       toast.present();
     },
+    async abreModalAvalPend(aval_pend) {
+      let modal = await this.$ionic.modalController.create({
+        component: ModalAvalPend,
+        componentProps: {
+          propsData: {
+            aval: aval_pend,
+          },
+        },
+      });
+      modal.present();
+    },
     inicializa() {
       var dados = JSON.parse(localStorage.getItem("isLogado"));
       this.nome = dados.nm_usuario;
       this.foto = dados.foto;
       this.id_usuario = dados.id_usuario;
     },
+    doRefresh(event){
+
+      this.inicializa();
+      this.listaAgendaCliente();
+      this.verificaAvaliacaoPendente();
+
+      setTimeout(() => {
+        console.log("Async operation has ended");
+        event.target.complete();
+      }, 2000);
+    }
   },
   mounted() {
     this.inicializa();

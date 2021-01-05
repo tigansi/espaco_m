@@ -24,8 +24,10 @@
                       <p>{{ nome_col }}</p>
                       <p>
                         <star-rating
+                          :show-rating="false"
+                          read-only="true"
                           v-bind:star-size="15"
-                          v-model="avaliacao_prof"
+                          :rating="avaliacao_prof"
                         />
                       </p>
                     </ion-label>
@@ -41,7 +43,7 @@
                   </ion-list-header>
                   <div v-if="tot_agen_dia > 0">
                     <div v-for="age of agenda_dia" :key="age.id_agenda">
-                      <ion-item>
+                      <ion-item button>
                         <ion-avatar slot="start">
                           <ion-img
                             :src="
@@ -266,25 +268,25 @@ export default {
         }
       });
     },
-    async doRefresh(event) {
+    doRefresh(event) {
+      this.inicializa();
       this.listaAgendaProf();
       this.buscaAvaliacao();
 
-      var dados = JSON.parse(localStorage.getItem("isLogado"));
-      this.nome_col = dados.nm_usuario;
-      this.foto = dados.foto;
-      this.id_usuario = dados.id_usuario;
       setTimeout(() => {
         console.log("Async operation has ended");
         event.target.complete();
       }, 2000);
     },
+    inicializa() {
+      var dados = JSON.parse(localStorage.getItem("isLogado"));
+      this.nome_col = dados.nm_usuario;
+      this.foto = dados.foto;
+      this.id_usuario = dados.id_usuario;
+    },
   },
   mounted() {
-    var dados = JSON.parse(localStorage.getItem("isLogado"));
-    this.nome_col = dados.nm_usuario;
-    this.foto = dados.foto;
-    this.id_usuario = dados.id_usuario;
+    this.inicializa();
     this.listaAgendaProf();
     this.buscaAvaliacao();
   },
