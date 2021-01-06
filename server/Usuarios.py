@@ -257,7 +257,6 @@ class Usuarios:
                     GROUP BY
 	                    usuarios.id_usuario """
 
-
             curso.execute(sql)
             dad = curso.fetchall()
 
@@ -312,6 +311,92 @@ class Usuarios:
             banco.commit()
 
             resul = {"msg": "Usuário desligado com sucesso", "sucesso": True}
+
+        except (Exception, psycopg2.Error) as error:
+            resul = {"msg": str(error), "sucesso": False}
+
+        curso.close()
+        banco.fechar()
+
+        print(resul)
+        return resul
+
+    def info_usuario(self, data: list) -> {}:
+        """
+        Método que lista os dados de um id junto com os
+        comentários
+        """
+        try:
+            banco = Banco()
+            curso = banco.conectar()
+
+            # Verificar qual é o tipo de usuário, CLI ou COL
+            if(data["tp"] == "CLI"):
+                sql = """SELECT
+                            usuarios.id_usuario,
+                            usuarios.nm_usuario,
+                            usuarios.email,
+                            usuarios.celular,
+                            usuarios.foto,
+                            to_char(AVG(avaliacao.vl_avaliacao_cli)::real, 
+                                '9.9') as nota
+                        FROM
+                            usuarios 
+                        JOIN 
+                            avaliacao 
+                        ON avaliacao.id_cliente = %s     AND
+						   avaliacao.id_cliente = usuarios.id_usuario
+						GROUP BY
+	                    	usuarios.id_usuario"""
+
+            elif(data["tp"] == "COL"):
+                sql = """SELECT
+                            usuarios.id_usuario,
+                            usuarios.nm_usuario,
+                            usuarios.email,
+                            usuarios.celular,
+                            usuarios.foto,
+                            to_char(AVG(avaliacao.vl_avaliacao_col)::real, 
+                                '9.9') as nota
+                        FROM
+                            usuarios 
+                        JOIN 
+                            avaliacao 
+                        ON avaliacao.id_cliente = %s AND
+						   avaliacao.id_colaborador = usuarios.id_usuario
+						GROUP BY
+	                    	usuarios.id_usuario"""
+
+            val = (data["id"], )
+            curso.execute(sql, val)
+            dad = curso.fetchall()
+
+            # Busca dos comentários
+            if(data["tp"] == "CLI"):
+                sql = """SELECT
+                            comentarios.id_comentario,
+	                        comentarios.comentario
+                        FROM 
+                        	comentarios
+                        JOIN avaliacao
+                        ON comentarios.id_avaliacao = avaliacao.id_avaliacao 
+                        AND avaliacao.id_cliente = %s"""
+            
+            elif(data["tp"] == "COL"):
+                sql = """SELECT
+	                        comentarios.comentario
+                        FROM 
+                        	comentarios
+                        JOIN avaliacao
+                        ON comentarios.id_avaliacao = avaliacao.id_avaliacao 
+                        AND avaliacao.id_colaborador = %s"""
+            
+            val = (data["id"], )
+            curso.execute(sql, val)
+            com = curso.fetchall()
+            
+            resul = {"msg": "Dados encontrados", "sucesso": True,
+                     "dados": dad, "comentarios": com}
 
         except (Exception, psycopg2.Error) as error:
             resul = {"msg": str(error), "sucesso": False}

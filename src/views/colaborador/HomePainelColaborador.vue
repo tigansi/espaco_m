@@ -26,6 +26,7 @@ import {
   play,
   stop,
   chevronDownCircleOutline,
+  informationCircle,
 } from "ionicons/icons";
 
 addIcons({
@@ -54,6 +55,9 @@ addIcons({
   "md-stop": stop,
   "ios-stop": stop,
   "md-chevron-down-circle-outline": chevronDownCircleOutline,
+  "ios-chevron-down-circle-outline": chevronDownCircleOutline,
+  "md-information-circle": informationCircle,
+  "ios-information-circle": informationCircle,
 });
 
 export default {

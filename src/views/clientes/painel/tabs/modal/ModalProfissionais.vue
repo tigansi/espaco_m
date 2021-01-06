@@ -28,15 +28,16 @@
                   </ion-avatar>
                   <ion-label>
                     <h3>{{ col.nm_col }}</h3>
-                    <p>Funcionário(a)</p>
                     <p>
                       <star-rating
-                        :show-rating="false"
+                        :show-rating="true"
                         read-only="true"
                         v-bind:star-size="15"
                         :rating="col.nota"
+                        :increment="0.01"
                       />
                     </p>
+                    <p>Funcionário(a)</p>
                   </ion-label>
 
                   <ion-button

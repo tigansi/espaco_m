@@ -4,7 +4,7 @@
       <ion-refresher mode="md" slot="fixed" @ionRefresh="doRefresh($event)">
         <ion-refresher-content
           :pulling-icon="chevronDownCircleOutline"
-          refreshing-text="Buscando informações..."
+          refreshing-text="Atualiazando..."
         ></ion-refresher-content>
       </ion-refresher>
       <ion-grid>

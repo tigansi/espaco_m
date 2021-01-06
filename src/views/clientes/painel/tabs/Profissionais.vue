@@ -41,10 +41,11 @@
                         <h3>{{ col.nm_usuario }}</h3>
                         <p>
                           <star-rating
-                            :show-rating="false"
+                            :show-rating="true"
                             read-only="true"
-                            v-bind:star-size="15"
+                            v-bind:star-size="12"
                             :rating="col.nota"
+                            :increment="0.01"
                           />
                         </p>
                         <p>Funcionário(a)</p>

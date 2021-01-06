@@ -4,7 +4,7 @@
       <ion-refresher mode="md" slot="fixed" @ionRefresh="doRefresh($event)">
         <ion-refresher-content
           :pulling-icon="chevronDownCircleOutline"
-          refreshing-text="Buscando informações..."
+          refreshing-text="Atualizando..."
         ></ion-refresher-content>
       </ion-refresher>
       <ion-grid>
@@ -24,10 +24,11 @@
                       <p>{{ nome_col }}</p>
                       <p>
                         <star-rating
-                          :show-rating="false"
+                          :show-rating="true"
                           read-only="true"
                           v-bind:star-size="15"
                           :rating="avaliacao_prof"
+                          :increment="0.01"
                         />
                       </p>
                     </ion-label>
@@ -43,7 +44,7 @@
                   </ion-list-header>
                   <div v-if="tot_agen_dia > 0">
                     <div v-for="age of agenda_dia" :key="age.id_agenda">
-                      <ion-item button>
+                      <ion-item>
                         <ion-avatar slot="start">
                           <ion-img
                             :src="
@@ -60,14 +61,6 @@
 
                         <div v-if="age.is_andamento">
                           <ion-button
-                            @click="paraServico(age.id_agenda)"
-                            color="warning"
-                            id="btn_play"
-                            shape="round"
-                          >
-                            <ion-icon slot="icon-only" name="stop"></ion-icon>
-                          </ion-button>
-                          <ion-button
                             @click="
                               alertaConcluiServico(
                                 age.id_agenda,
@@ -83,6 +76,27 @@
                               name="check-mark-done-circle"
                             ></ion-icon>
                           </ion-button>
+                          <br />
+                          <ion-button
+                            @click="paraServico(age.id_agenda)"
+                            
+                            id="btn_play"
+                            shape="round"
+                          >
+                            <ion-icon slot="icon-only" name="stop"></ion-icon>
+                          </ion-button>
+                          <br />
+                          <ion-button
+                            @click="abreModalDetalheCliente(age.id_cliente)"
+                            color="dark"
+                            id="btn_info"
+                            shape="round"
+                          >
+                            <ion-icon
+                              slot="icon-only"
+                              name="information-circle"
+                            ></ion-icon>
+                          </ion-button>
                         </div>
                         <div v-else>
                           <ion-button
@@ -92,6 +106,18 @@
                             shape="round"
                           >
                             <ion-icon slot="icon-only" name="play"></ion-icon>
+                          </ion-button>
+                          <br />
+                          <ion-button
+                            @click="abreModalDetalheCliente(age.id_cliente)"
+                            color="dark"
+                            id="btn_info"
+                            shape="round"
+                          >
+                            <ion-icon
+                              slot="icon-only"
+                              name="information-circle"
+                            ></ion-icon>
                           </ion-button>
                         </div>
                       </ion-item>
@@ -117,6 +143,7 @@
 import Provider from "@/services/provider";
 import { alertController } from "@ionic/core";
 import ModalAvaliacao from "./modal/ModalAvaliacao";
+import ModalDetalheCliente from "./modal/ModalDetalheCliente";
 import StarRating from "vue-star-rating";
 
 export default {
@@ -143,6 +170,18 @@ export default {
             id_agenda: id_agenda,
             id_cliente: id_cliente,
             id_usuario: this.id_usuario,
+          },
+        },
+      });
+      modal.present();
+    },
+    async abreModalDetalheCliente(id_cliente) {
+      // alert(id_cliente);
+      let modal = await this.$ionic.modalController.create({
+        component: ModalDetalheCliente,
+        componentProps: {
+          propsData: {
+            id_cliente: id_cliente,
           },
         },
       });
@@ -296,5 +335,11 @@ export default {
 <style>
 #page {
   --background: rgb(55, 52, 53);
+}
+
+#btn_play {
+  --background: rgb(60, 187, 178);
+  --background-activated: rgb(60, 187, 178);
+  --background-hover: rgb(60, 187, 178);
 }
 </style>

@@ -46,6 +46,9 @@ def usuarios():
         elif(data["tipo"] == "desliga_user"):
             pass
 
+        elif(data["tipo"] == "info_user"):
+            return json.dumps(usuarios.info_usuario(data))
+
 
 @app.route("/altera_dados", methods=["POST"])
 def altera_dados():
@@ -215,5 +218,5 @@ def avaliacao():
 if __name__ == '__main__':
     app.run(
         debug=True,
-        host="192.168.1.166")
+        host="192.168.8.7")
     app.config['TEMPLATES_AUTORELOAD'] = True
