@@ -32,10 +32,12 @@
             <ion-item>
               <ion-label position="floating">E-mail</ion-label>
               <IonInputVue v-model="email" />
+              <ion-icon slot="end" name="call"></ion-icon>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Telefone</ion-label>
               <IonInputVue v-model="cel" />
+              <ion-icon slot="end" name="mail"></ion-icon>
             </ion-item>
           </ion-list>
         </ion-card-content>
@@ -47,6 +49,7 @@
               <ion-item>
                 <ion-label position="floating">Cometário</ion-label>
                 <IonTextareaVue v-bind:value="com.comentario"></IonTextareaVue>
+                <ion-icon slot="end" name="chatbox"></ion-icon>
               </ion-item>
             </div>
           </ion-list>

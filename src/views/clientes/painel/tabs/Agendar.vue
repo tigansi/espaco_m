@@ -3,8 +3,8 @@
     <ion-content id="page">
       <ion-refresher mode="md" slot="fixed" @ionRefresh="doRefresh($event)">
         <ion-refresher-content
-          :pulling-icon="chevronDownCircleOutline"
-          refreshing-text="Atualiazando..."
+          pulling-icon="chevron-down-circle-outline"
+          refreshing-text="Atualizando..."
         ></ion-refresher-content>
       </ion-refresher>
       <ion-grid>
@@ -196,8 +196,7 @@ export default {
       this.foto = dados.foto;
       this.id_usuario = dados.id_usuario;
     },
-    doRefresh(event){
-
+    doRefresh(event) {
       this.inicializa();
       this.listaAgendaCliente();
       this.verificaAvaliacaoPendente();
@@ -206,7 +205,7 @@ export default {
         console.log("Async operation has ended");
         event.target.complete();
       }, 2000);
-    }
+    },
   },
   mounted() {
     this.inicializa();

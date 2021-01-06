@@ -3,7 +3,7 @@
     <ion-content id="page">
       <ion-refresher mode="md" slot="fixed" @ionRefresh="doRefresh($event)">
         <ion-refresher-content
-          :pulling-icon="chevronDownCircleOutline"
+          pulling-icon="chevron-down-circle-outline"
           refreshing-text="Atualizando..."
         ></ion-refresher-content>
       </ion-refresher>
@@ -25,7 +25,7 @@
                       <p>
                         <star-rating
                           :show-rating="true"
-                          read-only="true"
+                          :read-only="true"
                           v-bind:star-size="15"
                           :rating="parseFloat(avaliacao_prof)"
                           :increment="0.01"
@@ -69,7 +69,6 @@
                             "
                             color="success"
                             id="btn_play"
-                            shape="round"
                           >
                             <ion-icon
                               slot="icon-only"
@@ -79,9 +78,7 @@
                           <br />
                           <ion-button
                             @click="paraServico(age.id_agenda)"
-                            
                             id="btn_play"
-                            shape="round"
                           >
                             <ion-icon slot="icon-only" name="stop"></ion-icon>
                           </ion-button>
@@ -90,7 +87,6 @@
                             @click="abreModalDetalheCliente(age.id_cliente)"
                             color="dark"
                             id="btn_info"
-                            shape="round"
                           >
                             <ion-icon
                               slot="icon-only"
@@ -103,7 +99,6 @@
                             @click="alertaIniciaServico(age.id_agenda)"
                             color="success"
                             id="btn_play"
-                            shape="round"
                           >
                             <ion-icon slot="icon-only" name="play"></ion-icon>
                           </ion-button>
@@ -112,7 +107,6 @@
                             @click="abreModalDetalheCliente(age.id_cliente)"
                             color="dark"
                             id="btn_info"
-                            shape="round"
                           >
                             <ion-icon
                               slot="icon-only"

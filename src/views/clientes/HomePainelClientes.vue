@@ -25,6 +25,8 @@ import {
   image,
   informationCircle,
   star,
+  chatbox,
+  chevronDownCircleOutline,
 } from "ionicons/icons";
 addIcons({
   "md-person": person,
@@ -53,6 +55,10 @@ addIcons({
   "ios-information-circle": informationCircle,
   "md-star": star,
   "ios-star": star,
+  "md-chatbox": chatbox,
+  "ios-chatbox": chatbox,
+  "md-chevron-down-circle-outline": chevronDownCircleOutline,
+  "ios-chevron-down-circle-outline": chevronDownCircleOutline,
 });
 
 import MenuCliente from "@/components/MenuCliente";
