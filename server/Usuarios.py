@@ -330,8 +330,11 @@ class Usuarios:
             banco = Banco()
             curso = banco.conectar()
 
+            print(str(data["id"]))
+
             # Verificar qual é o tipo de usuário, CLI ou COL
             if(data["tp"] == "CLI"):
+                print("CLI")
                 sql = """SELECT
                             usuarios.id_usuario,
                             usuarios.nm_usuario,
@@ -344,8 +347,8 @@ class Usuarios:
                             usuarios 
                         JOIN 
                             avaliacao 
-                        ON avaliacao.id_cliente = %s     AND
-						   avaliacao.id_cliente = usuarios.id_usuario
+                        ON avaliacao.id_colaborador = %s AND
+						   avaliacao.id_colaborador = usuarios.id_usuario
 						GROUP BY
 	                    	usuarios.id_usuario"""
 
@@ -363,13 +366,15 @@ class Usuarios:
                         JOIN 
                             avaliacao 
                         ON avaliacao.id_cliente = %s AND
-						   avaliacao.id_colaborador = usuarios.id_usuario
+						   avaliacao.id_cliente = usuarios.id_usuario
 						GROUP BY
 	                    	usuarios.id_usuario"""
 
             val = (data["id"], )
             curso.execute(sql, val)
             dad = curso.fetchall()
+
+            print(dad)
 
             # Busca dos comentários
             if(data["tp"] == "CLI"):
@@ -380,21 +385,22 @@ class Usuarios:
                         	comentarios
                         JOIN avaliacao
                         ON comentarios.id_avaliacao = avaliacao.id_avaliacao 
-                        AND avaliacao.id_cliente = %s"""
-            
+                        AND avaliacao.id_colaborador = %s"""
+
             elif(data["tp"] == "COL"):
                 sql = """SELECT
+                            comentarios.id_comentario,
 	                        comentarios.comentario
                         FROM 
                         	comentarios
                         JOIN avaliacao
                         ON comentarios.id_avaliacao = avaliacao.id_avaliacao 
-                        AND avaliacao.id_colaborador = %s"""
-            
+                        AND avaliacao.id_cliente = %s"""
+
             val = (data["id"], )
             curso.execute(sql, val)
             com = curso.fetchall()
-            
+
             resul = {"msg": "Dados encontrados", "sucesso": True,
                      "dados": dad, "comentarios": com}
 

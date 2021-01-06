@@ -14,6 +14,7 @@ import { addIcons } from "ionicons";
 import {
   person,
   calendar,
+  calendarClear,
   exit,
   home,
   people,
@@ -22,12 +23,16 @@ import {
   call,
   mail,
   image,
+  informationCircle,
+  star,
 } from "ionicons/icons";
 addIcons({
   "md-person": person,
   "ios-person": person,
   "md-calendar": calendar,
   "ios-calendar": calendar,
+  "md-calendar-clear": calendarClear,
+  "ios-calendar-clear": calendarClear,
   "md-exit": exit,
   "ios-exit": exit,
   "md-home": home,
@@ -44,6 +49,10 @@ addIcons({
   "ios-mail": call,
   "md-image": image,
   "ios-image": image,
+  "md-information-circle": informationCircle,
+  "ios-information-circle": informationCircle,
+  "md-star": star,
+  "ios-star": star,
 });
 
 import MenuCliente from "@/components/MenuCliente";

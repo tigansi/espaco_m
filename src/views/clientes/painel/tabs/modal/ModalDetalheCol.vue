@@ -20,8 +20,9 @@
                 :src="'http://192.168.8.7:5000/fotos?caminho=' + foto"
               ></ion-img>
             </ion-avatar>
+
             <ion-label>
-              <h2>{{ nm_cli }}</h2>
+              <h2>{{ nm_col }}</h2>
               <p>
                 {{ nota }}
                 <ion-icon name="star"></ion-icon>
@@ -61,11 +62,11 @@ import Provider from "@/services/provider.js";
 
 export default {
   components: {},
-  props: ["id_cliente"],
+  props: ["id_colaborador"],
   data() {
     return {
-      id_cli: this.id_cliente,
-      nm_cli: "",
+      id_col: this.id_colaborador,
+      nm_col: "",
       email: "",
       cel: "",
       foto: "",
@@ -81,13 +82,14 @@ export default {
     buscaDadosCliente() {
       let dados = {
         tipo: "info_user",
-        tp: "COL",
-        id: this.id_cli,
+        tp: "CLI",
+        id: this.id_col,
       };
       Provider.provider("usuarios", JSON.stringify(dados)).then((res) => {
         if (res.data.sucesso) {
+          console.log(res.data.dados);
           this.comentarios = res.data.comentarios;
-          this.nm_cli = res.data.dados[0].nm_usuario;
+          this.nm_col = res.data.dados[0].nm_usuario;
           this.email = res.data.dados[0].email;
           this.cel = res.data.dados[0].celular;
           this.foto = res.data.dados[0].foto;
@@ -99,7 +101,7 @@ export default {
   },
   mounted() {
     this.buscaDadosCliente();
-    console.log(this.nota);
+    console.log(this.id_colaborador);
   },
 };
 </script>
@@ -107,5 +109,9 @@ export default {
 <style>
 #page {
   --background: rgb(55, 52, 53);
+}
+
+.vue-star-rating {
+  text-align: center;
 }
 </style>

@@ -22,7 +22,11 @@
           <ion-list id="form">
             <ion-item>
               <ion-label position="floating">Escolha uma data</ion-label>
-              <IonInputVue v-model="data" type="date" />
+              <IonInputVue
+                v-model="data"
+                type="date"
+                placeholder="dd/mm/aaaa"
+              />
               <ion-icon slot="end" name="calendar"></ion-icon>
             </ion-item>
           </ion-list>

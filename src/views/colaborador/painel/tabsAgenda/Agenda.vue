@@ -27,7 +27,7 @@
                           :show-rating="true"
                           read-only="true"
                           v-bind:star-size="15"
-                          :rating="avaliacao_prof"
+                          :rating="parseFloat(avaliacao_prof)"
                           :increment="0.01"
                         />
                       </p>

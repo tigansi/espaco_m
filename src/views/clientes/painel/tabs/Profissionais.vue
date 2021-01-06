@@ -42,23 +42,35 @@
                         <p>
                           <star-rating
                             :show-rating="true"
-                            read-only="true"
                             v-bind:star-size="12"
-                            :rating="col.nota"
+                            :rating="parseFloat(col.nota)"
                             :increment="0.01"
                           />
                         </p>
                         <p>Funcionário(a)</p>
                       </ion-label>
-
-                      <ion-button
-                        @click="
-                          mostraServicosProf(col.id_usuario, col.nm_usuario)
-                        "
-                        id="btn_agendar"
-                        slot="end"
-                        >Agendar</ion-button
-                      >
+                      <div>
+                        <ion-button
+                          @click="
+                            mostraServicosProf(col.id_usuario, col.nm_usuario)
+                          "
+                          id="btn_agendar"
+                        >
+                          <ion-icon
+                            slot="icon-only"
+                            name="calendar-clear"
+                          ></ion-icon></ion-button
+                        ><br />
+                        <ion-button
+                          @click="abreModalDetalheColaborador(col.id_usuario)"
+                          color="medium"
+                        >
+                          <ion-icon
+                            slot="icon-only"
+                            name="information-circle"
+                          ></ion-icon>
+                        </ion-button>
+                      </div>
                     </ion-item>
                   </div>
                 </ion-list>
@@ -75,6 +87,7 @@
 import Provider from "@/services/provider.js";
 import { toastController } from "@ionic/core";
 import ModalServicos from "./modal/ModalServicos";
+import ModalDetalheCol from "./modal/ModalDetalheCol";
 import StarRating from "vue-star-rating";
 
 export default {
@@ -99,6 +112,18 @@ export default {
           propsData: {
             id_colaborador: id_colaborador,
             nm_colaborador: nm_colaborador,
+          },
+        },
+      });
+      modal.present();
+    },
+    async abreModalDetalheColaborador(id_colaborador) {
+      // alert(id_cliente);
+      let modal = await this.$ionic.modalController.create({
+        component: ModalDetalheCol,
+        componentProps: {
+          propsData: {
+            id_colaborador: id_colaborador,
           },
         },
       });

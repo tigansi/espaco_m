@@ -27,6 +27,7 @@ import {
   stop,
   chevronDownCircleOutline,
   informationCircle,
+  star
 } from "ionicons/icons";
 
 addIcons({
@@ -58,6 +59,8 @@ addIcons({
   "ios-chevron-down-circle-outline": chevronDownCircleOutline,
   "md-information-circle": informationCircle,
   "ios-information-circle": informationCircle,
+  "md-star": star,
+  "ios-star": star,
 });
 
 export default {
