@@ -82,6 +82,7 @@
 
 <script>
 import { alertController, toastController } from "@ionic/core";
+import { Plugins } from "@capacitor/core";
 import Provider from "@/services/provider";
 import ModalAvalPend from "./modal/ModalAvalPend";
 
@@ -202,15 +203,35 @@ export default {
       this.verificaAvaliacaoPendente();
 
       setTimeout(() => {
-        console.log("Async operation has ended");
+        //console.log("Async operation has ended");
         event.target.complete();
       }, 2000);
+    },
+    async mostraNotificacao() {
+      const { LocalNotifications } = Plugins;
+      const canSend = await LocalNotifications.requestPermission();
+      if (canSend) {
+        await LocalNotifications.schedule({
+          notifications: [
+            {
+              title: "On sale",
+              body: "Widgets are 10% off. Act fast!",
+              id: 1,
+              schedule: { at: new Date(Date.now() + 1000 * 5) },
+              actionTypeId: "",
+              extra: null,
+            },
+          ],
+        });
+      }
     },
   },
   mounted() {
     this.inicializa();
     this.listaAgendaCliente();
     this.verificaAvaliacaoPendente();
+
+    
   },
 };
 </script>

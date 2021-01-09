@@ -31,9 +31,9 @@
                     <p>
                       <star-rating
                         :show-rating="true"
-                        read-only="true"
+                        :read-only="true"
                         v-bind:star-size="15"
-                        :rating="col.nota"
+                        :rating="parseFloat(col.nota)"
                         :increment="0.01"
                       />
                     </p>

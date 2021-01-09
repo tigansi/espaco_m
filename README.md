@@ -15,6 +15,11 @@
     * Rodar o npm install @ionic/vue@0.0.9;
     * Rodar o npm install ionicons(Instala os icones do IONIC);
 
+## Configuração do Python
+* Para criar o projeto a primeira vez, é necessário alguns passos:
+    * pip install psycopg2;
+    * pip install schedule;
+
 ## Configuração do android
 * Para criar o projeto a primeira vez, deve seguir os passos abaixo.
     * Rodar npm install @capacitor/core @capacitor/cli;
