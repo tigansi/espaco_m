@@ -49,7 +49,7 @@
                           <ion-img
                             :src="
                               'http://192.168.8.7:5000/fotos?caminho=' +
-                                age.foto
+                              age.foto
                             "
                           ></ion-img>
                         </ion-avatar>

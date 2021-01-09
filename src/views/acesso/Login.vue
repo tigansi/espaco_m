@@ -6,12 +6,14 @@
           <ion-col></ion-col>
           <ion-col size="12" size-sm>
             <div
-              style=" height: 100vh;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;"
+              style="
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+              "
             >
-              <ion-card style="--background:white">
+              <ion-card style="--background: white">
                 <ion-card-header>
                   <center>
                     <ion-img
@@ -51,7 +53,7 @@
                     <p style="display: inline">Ainda não possui conta ?</p>
                     <a
                       @click="direcionaView('Cadastro')"
-                      style="cursor: pointer;"
+                      style="cursor: pointer"
                       >Clique aqui</a
                     >
                   </center>
