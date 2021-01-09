@@ -40,7 +40,7 @@
               <ion-card-content>
                 <ion-list>
                   <ion-list-header>
-                    <h1>Agenda do dia</h1>
+                    <h1>Agendamentos</h1>
                   </ion-list-header>
                   <div v-if="tot_agen_dia > 0">
                     <div v-for="age of agenda_dia" :key="age.id_agenda">
