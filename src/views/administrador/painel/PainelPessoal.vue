@@ -1,7 +1,7 @@
 <template>
   <ion-app>
     <ion-header>
-      <ion-toolbar id="page" style="color:white">
+      <ion-toolbar id="page" style="color: white">
         <ion-buttons slot="start">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
@@ -23,8 +23,8 @@
             class="btn-tab"
             :to="{ name: 'CadastrarPessoas' }"
           >
-            <ion-icon name="person-add"></ion-icon>
-            <ion-label>Cadastrar pessoas</ion-label>
+            <ion-icon name="home"></ion-icon>
+            <ion-label>Salão</ion-label>
           </ion-tab-button>
 
           <ion-tab-button
@@ -33,7 +33,7 @@
             :to="{ name: 'ListagemPessoas' }"
           >
             <ion-icon name="people"></ion-icon>
-            <ion-label>Listar pessoas</ion-label>
+            <ion-label>Pessoal</ion-label>
           </ion-tab-button>
         </ion-tab-bar>
       </ion-tabs>

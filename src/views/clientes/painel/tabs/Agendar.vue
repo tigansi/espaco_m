@@ -28,7 +28,7 @@
                 </ion-list>
               </ion-card-content>
             </ion-card>
-            <ion-card style="background-color:white">
+            <ion-card style="background-color: white">
               <ion-card-content>
                 <ion-list>
                   <ion-list-header>
@@ -41,7 +41,7 @@
                           <ion-img
                             :src="
                               'http://192.168.8.7:5000/fotos?caminho=' +
-                                age.foto
+                              age.foto
                             "
                           ></ion-img>
                         </ion-avatar>
@@ -58,7 +58,6 @@
                             )
                           "
                           color="warning"
-                          shape="round"
                           >Desistir</ion-button
                         >
                       </ion-item>
@@ -230,8 +229,6 @@ export default {
     this.inicializa();
     this.listaAgendaCliente();
     this.verificaAvaliacaoPendente();
-
-    
   },
 };
 </script>

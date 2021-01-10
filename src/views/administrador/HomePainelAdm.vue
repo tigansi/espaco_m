@@ -32,6 +32,7 @@ import {
   trash,
   stopwatch,
   cash,
+  informationCircle,
 } from "ionicons/icons";
 addIcons({
   "md-person": person,
@@ -72,6 +73,8 @@ addIcons({
   "ios-stopwatch": stopwatch,
   "md-cash": cash,
   "ios-cash": cash,
+  "md-information-circle": informationCircle,
+  "ios-information-circle": informationCircle,
 });
 export default {
   components: {

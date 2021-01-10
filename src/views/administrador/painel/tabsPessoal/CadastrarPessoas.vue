@@ -1,5 +1,5 @@
 <template>
-  <ion-app>
+  <ion-page>
     <ion-content id="page">
       <ion-grid>
         <ion-row>
@@ -16,14 +16,13 @@
                     <ion-label>
                       <h2>Bem vindo(a)</h2>
                       <p>{{ nome_adm }}</p>
-                      <p>Avaliação:</p>
                     </ion-label>
                   </ion-item>
                 </ion-list>
               </ion-card-content>
             </ion-card>
 
-            <ion-card style="background-color:white">
+            <ion-card style="background-color: white">
               <ion-card-content>
                 <ion-list>
                   <ion-list-header>
@@ -49,87 +48,14 @@
               </ion-card-content>
             </ion-card>
           </ion-col>
-          <ion-col>
-            <ion-card style="background-color:white">
-              <ion-card-content>
-                <div id="form">
-                  <ion-list>
-                    <ion-list-header>
-                      <h1>Novo colaborador</h1>
-                    </ion-list-header>
-                    <ion-item>
-                      <ion-label position="floating">Nome</ion-label>
-                      <IonInputVue v-model="form.nome" />
-                      <ion-icon slot="end" name="person"></ion-icon>
-                    </ion-item>
-                    <ion-item>
-                      <input
-                        type="hidden"
-                        v-mask="'(##) ####-#####'"
-                        v-model="form.celular"
-                      />
-                      <ion-label position="floating">Celular</ion-label>
-                      <IonInputVue type="tel" v-model="form.celular" />
-                      <ion-icon slot="end" name="call"></ion-icon>
-                    </ion-item>
-                    <ion-item>
-                      <ion-label position="floating">E-mail</ion-label>
-                      <IonInputVue v-model="form.email" type="email" />
-                      <ion-icon slot="end" name="mail"></ion-icon>
-                    </ion-item>
-                    <ion-item>
-                      <ion-label position="stacked">Aniversário</ion-label>
-                      <IonInputVue
-                        v-model="form.aniversario"
-                        placeholder="Coloque sua data de nascimento"
-                        type="date"
-                      />
-                      <ion-icon slot="end" name="calendar"></ion-icon>
-                    </ion-item>
-                    <ion-item>
-                      <ion-label position="floating">Senha</ion-label>
-                      <IonInputVue v-model="form.senha" type="password" />
-                      <ion-icon slot="end" name="lock-closed"></ion-icon>
-                    </ion-item>
-
-                    <ion-item>
-                      <ion-label position="floating">Tipo de usuário</ion-label>
-                      <ion-icon slot="end" name="people"></ion-icon>
-                      <IonSelectVue v-model="form.tipo_user">
-                        <ion-select-option value="CLI"
-                          >Cliente</ion-select-option
-                        >
-                        <ion-select-option value="COL"
-                          >Colaborador</ion-select-option
-                        >
-                        <ion-select-option value="ADM"
-                          >Administrador</ion-select-option
-                        >
-                      </IonSelectVue>
-                    </ion-item>
-                  </ion-list>
-
-                  <br />
-
-                  <ion-button @click="efetuaCadastro" size="block" id="btn_cad"
-                    >Cadastrar</ion-button
-                  >
-                </div>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
         </ion-row>
       </ion-grid>
     </ion-content>
-  </ion-app>
+  </ion-page>
 </template>
 
 <script>
-import {
-  toastController,
-  loadingController,
-  alertController,
-} from "@ionic/core";
+import { toastController, alertController } from "@ionic/core";
 import Provider from "@/services/provider.js";
 export default {
   data() {
@@ -148,66 +74,6 @@ export default {
     };
   },
   methods: {
-    async efetuaCadastro() {
-      if (this.form.nome == "") {
-        this.presentToast("Campo nome está em branco");
-      } else {
-        if (this.form.celular == "") {
-          this.presentToast("Campo celular está em branco");
-        } else {
-          if (this.form.email == "") {
-            this.presentToast("Campo e-mail está em branco");
-          } else {
-            if (this.form.aniversario == "") {
-              this.presentToast("Campo aniversário está em branco");
-            } else {
-              if (this.form.senha == "" || this.form.senha.length < 6) {
-                this.presentToast(
-                  "Campo senha está em branco ou é muito pequena"
-                );
-              } else {
-                if (this.form.tipo_user == "") {
-                  this.presentToast("Campo tipo de usuário está em branco");
-                } else {
-                  let dados = {
-                    tipo: "cad_usuario",
-                    nome: this.form.nome,
-                    celular: this.form.celular,
-                    email: this.form.email,
-                    aniversario: this.form.aniversario,
-                    senha: this.form.senha,
-                    tp: this.form.tipo_user,
-                  };
-
-                  const loading = await loadingController.create({
-                    cssClass: "my-custom-class",
-                    message: "Um momento...",
-                  });
-                  loading.present();
-
-                  Provider.provider("usuarios", JSON.stringify(dados))
-                    .then((res) => {
-                      if (res.data.sucesso) {
-                        this.inicializa();
-                        loading.dismiss();
-                        this.listaColaboradores();
-                        this.alertaSucesso(res.data.msg, "Sucesso");
-                      } else {
-                        loading.dismiss();
-                        this.alertaSucesso(res.data.msg, "Problemas !!!");
-                      }
-                    })
-                    .catch((error) => {
-                      loading.dismiss();
-                      console.log("TIMEOUT " + error);
-                    });
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     async alertaSucesso(msg, tipo) {
       const alert = await alertController.create({
         cssClass: "my-custom-class",

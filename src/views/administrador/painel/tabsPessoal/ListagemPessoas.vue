@@ -4,32 +4,95 @@
       <ion-grid>
         <ion-row>
           <ion-col size="12">
-            <ion-card style="background-color:white">
-              <ion-card-header>
-                <ion-grid>
-                  <ion-row>
-                    <ion-col size-md="10" size-sm="10">
-                      <ion-card-subtitle>Bem vindo(a)</ion-card-subtitle>
-                      <ion-card-title>{{ nome_adm }} </ion-card-title>
-                    </ion-col>
-                    <ion-col>
-                      <center>
-                        <ion-avatar>
-                          <ion-img
-                            :src="
-                              'http://192.168.8.7:5000/fotos?caminho=' + foto
-                            "
-                          ></ion-img>
-                        </ion-avatar>
-                      </center>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-              </ion-card-header>
+            <ion-card style="background-color: white">
+              <ion-card-content>
+                <ion-list>
+                  <ion-item>
+                    <ion-avatar slot="start">
+                      <ion-img
+                        :src="'http://192.168.8.7:5000/fotos?caminho=' + foto"
+                      ></ion-img>
+                    </ion-avatar>
+                    <ion-label>
+                      <h2>Bem vindo(a)</h2>
+                      <p>{{ nome_adm }}</p>
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+              </ion-card-content>
             </ion-card>
           </ion-col>
           <ion-col>
-            <ion-card style="background-color:white">
+            <ion-card style="background-color: white">
+              <ion-card-content>
+                <div id="form">
+                  <ion-list>
+                    <ion-list-header>
+                      <h1>Novo colaborador</h1>
+                    </ion-list-header>
+                    <ion-item>
+                      <ion-label position="floating">Nome</ion-label>
+                      <IonInputVue v-model="form.nome" />
+                      <ion-icon slot="end" name="person"></ion-icon>
+                    </ion-item>
+                    <ion-item>
+                      <input
+                        type="hidden"
+                        v-mask="'(##) ####-#####'"
+                        v-model="form.celular"
+                      />
+                      <ion-label position="floating">Celular</ion-label>
+                      <IonInputVue type="tel" v-model="form.celular" />
+                      <ion-icon slot="end" name="call"></ion-icon>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label position="floating">E-mail</ion-label>
+                      <IonInputVue v-model="form.email" type="email" />
+                      <ion-icon slot="end" name="mail"></ion-icon>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label position="stacked">Aniversário</ion-label>
+                      <IonInputVue
+                        v-model="form.aniversario"
+                        placeholder="Coloque sua data de nascimento"
+                        type="date"
+                      />
+                      <ion-icon slot="end" name="calendar"></ion-icon>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label position="floating">Senha</ion-label>
+                      <IonInputVue v-model="form.senha" type="password" />
+                      <ion-icon slot="end" name="lock-closed"></ion-icon>
+                    </ion-item>
+
+                    <ion-item>
+                      <ion-label position="floating">Tipo de usuário</ion-label>
+                      <ion-icon slot="end" name="people"></ion-icon>
+                      <IonSelectVue v-model="form.tipo_user">
+                        <ion-select-option value="CLI"
+                          >Cliente</ion-select-option
+                        >
+                        <ion-select-option value="COL"
+                          >Colaborador</ion-select-option
+                        >
+                        <ion-select-option value="ADM"
+                          >Administrador</ion-select-option
+                        >
+                      </IonSelectVue>
+                    </ion-item>
+                  </ion-list>
+
+                  <br />
+
+                  <ion-button @click="efetuaCadastro" size="block" id="btn_cad"
+                    >Cadastrar</ion-button
+                  >
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col>
+            <ion-card style="background-color: white">
               <ion-card-content>
                 <div id="form">
                   <ion-list>
@@ -65,7 +128,7 @@
                           >Cliente</ion-select-option
                         >
                         <ion-select-option value="COL"
-                          >Funcionário</ion-select-option
+                          >Colaborador</ion-select-option
                         >
                         <ion-select-option value="ADM"
                           >Administrador</ion-select-option
@@ -89,52 +152,49 @@
 
           <ion-col size-md="6" size="12" size-sm>
             <div v-for="col of colaboradores" :key="col.id_usuario">
-              <ion-card style="background-color:white">
+              <ion-card style="background-color: white">
                 <ion-card-content>
-                  <ion-grid>
-                    <ion-row>
-                      <ion-col>
-                        <ion-card-subtitle>{{ col.tipo }}</ion-card-subtitle>
-                        <ion-card-subtitle>{{
-                          col.nm_usuario
-                        }}</ion-card-subtitle>
-                        <ion-card-subtitle>{{ col.email }}</ion-card-subtitle>
-                      </ion-col>
-                      <ion-col size="3">
-                        <center>
-                          <ion-avatar>
-                            <ion-img
-                              :src="
-                                'http://192.168.8.7:5000/fotos?caminho=' +
-                                  col.foto
-                              "
-                            ></ion-img>
-                          </ion-avatar>
-
-                          <div v-if="form.status == '1'">
-                            <ion-button
-                              @click="efetuaDemissao(col.id_usuario, col.tipo)"
-                              color="danger"
-                              size="small"
-                            >
-                              <ion-icon
-                                slot="icon-only"
-                                name="person-remove"
-                              ></ion-icon>
-                            </ion-button>
-                          </div>
-                          <div v-else-if="form.status =='0'">
-                            <ion-button color="success" size="small">
-                              <ion-icon
-                                slot="icon-only"
-                                name="person-add"
-                              ></ion-icon>
-                            </ion-button>
-                          </div>
-                        </center>
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
+                  <ion-list>
+                    <ion-item>
+                      <ion-avatar slot="start">
+                        <ion-img
+                          :src="
+                            'http://192.168.8.7:5000/fotos?caminho=' + col.foto
+                          "
+                        ></ion-img>
+                      </ion-avatar>
+                      <ion-label>
+                        <h2>{{ col.nm_usuario }}</h2>
+                        <div v-if="col.nota > 0">
+                          <p>Avaliação:</p>
+                        </div>
+                        <div v-else>
+                          <p>Não há avaliações</p>
+                        </div>
+                        <p>{{ col.email }}</p>
+                      </ion-label>
+                      <div>
+                        <ion-button
+                          color="danger"
+                          @click="efetuaDemissao(col.id_usuario, col.tipo)"
+                        >
+                          <ion-icon
+                            size="small"
+                            slot="icon-only"
+                            name="person-remove"
+                          ></ion-icon>
+                        </ion-button>
+                        <br />
+                        <ion-button color="medium">
+                          <ion-icon
+                            size="small"
+                            slot="icon-only"
+                            name="information-circle"
+                          ></ion-icon>
+                        </ion-button>
+                      </div>
+                    </ion-item>
+                  </ion-list>
                 </ion-card-content>
               </ion-card>
             </div>
@@ -172,6 +232,66 @@ export default {
       this.confirmaDemissao(id, tipo);
     },
 
+    async efetuaCadastro() {
+      if (this.form.nome == "") {
+        this.presentToast("Campo nome está em branco");
+      } else {
+        if (this.form.celular == "") {
+          this.presentToast("Campo celular está em branco");
+        } else {
+          if (this.form.email == "") {
+            this.presentToast("Campo e-mail está em branco");
+          } else {
+            if (this.form.aniversario == "") {
+              this.presentToast("Campo aniversário está em branco");
+            } else {
+              if (this.form.senha == "" || this.form.senha.length < 6) {
+                this.presentToast(
+                  "Campo senha está em branco ou é muito pequena"
+                );
+              } else {
+                if (this.form.tipo_user == "") {
+                  this.presentToast("Campo tipo de usuário está em branco");
+                } else {
+                  let dados = {
+                    tipo: "cad_usuario",
+                    nome: this.form.nome,
+                    celular: this.form.celular,
+                    email: this.form.email,
+                    aniversario: this.form.aniversario,
+                    senha: this.form.senha,
+                    tp: this.form.tipo_user,
+                  };
+
+                  const loading = await loadingController.create({
+                    cssClass: "my-custom-class",
+                    message: "Um momento...",
+                  });
+                  loading.present();
+
+                  Provider.provider("usuarios", JSON.stringify(dados))
+                    .then((res) => {
+                      if (res.data.sucesso) {
+                        //this.inicializa();
+                        loading.dismiss();
+                        //this.listaColaboradores();
+                        this.alertaSucesso(res.data.msg, "Sucesso");
+                      } else {
+                        loading.dismiss();
+                        this.alertaSucesso(res.data.msg, "Problemas !!!");
+                      }
+                    })
+                    .catch((error) => {
+                      loading.dismiss();
+                      console.log("TIMEOUT " + error);
+                    });
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     async efetuaPesquisa() {
       let dados = {
         tipo: "lista_colaboradores",
@@ -215,6 +335,16 @@ export default {
         cssClass: "ion-toast",
       });
       toast.present();
+    },
+    async alertaSucesso(msg, tipo) {
+      const alert = await alertController.create({
+        cssClass: "my-custom-class",
+        header: tipo,
+        message: msg,
+        buttons: ["OK"],
+      });
+
+      await alert.present();
     },
     async confirmaDemissao(id, tipo) {
       const alert = await alertController.create({

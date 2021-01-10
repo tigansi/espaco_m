@@ -224,16 +224,19 @@ class Usuarios:
             where = list()
 
             if(data["nome"] != ""):
-                where.append("nm_usuario LIKE '%" + str(data["nome"]) + "%'")
+                where.append("usuarios.nm_usuario LIKE '%" +
+                             str(data["nome"]) + "%'")
 
             if(data["email"] != ""):
-                where.append("email LIKE '%" + str(data["email"]) + "%'")
+                where.append("usuarios.email LIKE '%" +
+                             str(data["email"]) + "%'")
 
             if(data["status"] != ""):
-                where.append("is_ativo ='" + str(data["status"]) + "'")
+                where.append("usuarios.is_ativo ='" +
+                             str(data["status"]) + "'")
 
             if(data["tp"] != ""):
-                where.append("tipo LIKE '%" + str(data["tp"]) + "%'")
+                where.append("usuarios.tipo LIKE '%" + str(data["tp"]) + "%'")
 
             # Junção das strings
             condi = (" and ".join(where))
@@ -252,7 +255,8 @@ class Usuarios:
                     JOIN 
                         avaliacao 
                     ON 
-                        usuarios.id_usuario = avaliacao.id_colaborador
+                        usuarios.id_usuario = avaliacao.id_colaborador AND
+						avaliacao.vl_avaliacao_col > 0
                     WHERE """ + str(condi) + """ 
                     GROUP BY
 	                    usuarios.id_usuario """
@@ -260,19 +264,31 @@ class Usuarios:
             curso.execute(sql)
             dad = curso.fetchall()
 
-            # Momento de realizar a contagem do dados
+            # Se caso o colaborador ainda não possua uma avaliação na tabela de
+            # avaliações, o comando acima não funcionará, pois ele está atrelado ao
+            # Join. Portanto, para resolver essa situação, é necessário testar a
+            # variável dad, pois se ela for nula ou vazia tem de fazer a pesquisa
+            # simples e tratar a avaliação na aplicação.
 
-            sql = """SELECT 
-                        count(*) as qtd 
-                    FROM 
-                        usuarios 
-                    WHERE """ + str(condi)
+            if(len(dad) > 0):
+                resul = {"msg": "Dados encontrados",
+                         "sucesso": True, "dados": dad, "total": 0}
+            else:
+                sql = """SELECT
+                            usuarios.id_usuario,
+                            usuarios.nm_usuario,
+                            usuarios.email,
+                            usuarios.foto,
+                            usuarios.tipo
+                        FROM 
+                            usuarios
+                        WHERE """ + str(condi)
 
-            curso.execute(sql)
-            tot = curso.fetchall()
+                curso.execute(sql)
+                dad = curso.fetchall()
 
-            resul = {"msg": "Dados encontrados",
-                     "sucesso": True, "dados": dad, "total": tot}
+                resul = {"msg": "Dados encontrados",
+                         "sucesso": True, "dados": dad, "total": 0}
 
         except (Exception, psycopg2.Error) as error:
             resul = {"msg": str(error), "sucesso": False}
