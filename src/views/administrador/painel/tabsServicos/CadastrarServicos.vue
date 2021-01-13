@@ -1,6 +1,12 @@
 <template>
   <ion-page>
     <ion-content id="page">
+      <ion-refresher mode="md" slot="fixed" @ionRefresh="doRefresh($event)">
+        <ion-refresher-content
+          pulling-icon="chevron-down-circle-outline"
+          refreshing-text="Atualizando..."
+        ></ion-refresher-content>
+      </ion-refresher>
       <ion-grid>
         <ion-row>
           <ion-col size="12">
@@ -249,6 +255,17 @@ export default {
       this.form.nm_categoria = "";
       this.form.duracao = "";
       this.form.valor = "";
+    },
+    doRefresh(event) {
+      var dados = JSON.parse(localStorage.getItem("isLogado"));
+      this.nome_adm = dados.nm_usuario;
+      this.foto = dados.foto;
+      this.listaCategorias();
+      this.listaServicos();
+      setTimeout(() => {
+        //console.log("Async operation has ended");
+        event.target.complete();
+      }, 2000);
     },
   },
   mounted() {

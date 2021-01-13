@@ -8,7 +8,7 @@
         <ion-title>Administrador</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content id="page">
+    <ion-content >
       <ion-tabs>
         <ion-tab tab="CadastrarServicos" :routes="['CadastrarServicos']">
           <CadastrarServicos />
